@@ -9,15 +9,11 @@ def main():
 
   # check_digit()
 
-  # make_clust()
+  make_clust()
 
-  tmp = range(28)
-
-  print(tmp)
-
-  tmp = [i - 13.5 for i in tmp]
-
-  print(tmp)
+  # tmp = range(28)
+  # tmp = [i - 13.5 for i in tmp]
+  # print(tmp)
 
 def make_clust():
   from scipy.io import loadmat 
@@ -46,8 +42,9 @@ def make_clust():
     col_labels.append('Zero-'+str(i))
 
   row_labels = []
-  for i in range(num_pixels):
-    row_labels.append('pixel'+str(i))
+  for i in range(28):
+    for j in range(28):
+      row_labels.append('pos_'+str(i)+'_'+str(j))
 
 
   df = pd.DataFrame(data = small_mat, index=row_labels, columns=col_labels)
