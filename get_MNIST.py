@@ -18,6 +18,7 @@ def main():
 def make_clust():
   from scipy.io import loadmat 
   import pandas as pd 
+  import numpy as np
 
   mnist_obj = loadmat('custom_data_home/mldata/mnist-original.mat')
 
@@ -28,18 +29,46 @@ def make_clust():
   # write matrix to file 
   mat = mnist_obj['data']
 
-  small_mat = mat[:,:100]
+  # # 0s 
+  # col_num = 0
 
-  print(small_mat.shape)
+  # # 3s 
+  # col_num = 20500
 
-  num_zeros = 100
+  # # 7 
+  # col_num = 45000
+
+
+  col_num = 0
+  tmp_mat = mat[:,col_num:col_num+100]
+  small_mat = tmp_mat
+  
+  col_num = 20500
+  tmp_mat = mat[:,col_num:col_num+100]
+  small_mat = np.hstack((small_mat,tmp_mat))
+
+  col_num = 45000
+  tmp_mat = mat[:,col_num:col_num+100]
+  small_mat = np.hstack((small_mat,tmp_mat))  
+
+
+  small_size = small_mat.shape
+
+  num_zeros = small_size[1]
 
   num_pixels = 784
 
 
   col_labels = []
   for i in range(num_zeros):
-    col_labels.append('Zero-'+str(i))
+    if i < 100:
+      col_labels.append('Zero-'+str(i))
+    if i>= 100 and i < 200:
+      col_labels.append('Three-'+str(i))
+    if i>=200 and i < 300:
+      col_labels.append('Seven-'+str(i))
+
+  print(len(col_labels))
 
   row_labels = []
   for i in range(28):
@@ -61,8 +90,19 @@ def check_digit():
 
   print(mat.shape)
 
+  # 7 
+  # inst_digit = 45000
+
+  # # 3: 20500
+  inst_digit = 20100
+  # digit = mat[:,inst_digit]
+
   # 3: 20500
-  digit = mat[:,20501]
+  # inst_digit = 69000
+  digit = mat[:,inst_digit]
+
+  for tmp in range(100):
+    print(mnist_obj['label'][0][inst_digit+tmp])
 
   img_width = 28
 
