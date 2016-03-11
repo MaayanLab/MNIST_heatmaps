@@ -59,6 +59,7 @@ def make_clust():
   num_pixels = 784
 
 
+  # write col names 
   col_labels = []
   for i in range(num_zeros):
     if i < 100:
@@ -67,6 +68,8 @@ def make_clust():
       col_labels.append('Three-'+str(i))
     if i>=200 and i < 300:
       col_labels.append('Seven-'+str(i))
+
+  # write col category 
 
   print(len(col_labels))
 
@@ -78,8 +81,36 @@ def make_clust():
 
   df = pd.DataFrame(data = small_mat, index=row_labels, columns=col_labels)
 
+  # df.to_csv('example_matrix.txt',sep='\t')
 
-  df.to_csv('example_matrix.txt',sep='\t')
+  fw = open('MNIST_labels.txt','w')
+
+  # write names 
+  fw.write('\t')
+  for inst_name in col_labels:
+    fw.write(inst_name+'\t')
+
+  # write categories 
+  fw.write('\n\t')
+  for inst_name in col_labels:
+    inst_cat = inst_name.split('-')[0]
+    fw.write(inst_cat+'\t')
+
+  fw.write('\n')
+
+  for i in range(len(row_labels)):
+    row_data = small_mat[i,:]
+
+    print(row_data)
+
+    fw.write(row_labels[i]+'\t')
+
+    for inst_data in row_data:
+      fw.write(str(inst_data)+'\t')
+
+    fw.write('\n')
+
+  fw.close()
 
 
 def check_digit():
