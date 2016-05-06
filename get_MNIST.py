@@ -19,6 +19,8 @@ def make_clust():
   from scipy.io import loadmat 
   import pandas as pd 
   import numpy as np
+  import random 
+  import math
 
   mnist_obj = loadmat('custom_data_home/mldata/mnist-original.mat')
 
@@ -54,7 +56,14 @@ def make_clust():
 
     inst_label = digit_labels[i]
 
-    inst_label = label_dict[inst_label] + '-' + str(i)
+    inst_count = num_digit[inst_label]
+
+    num_digit[inst_label] = num_digit[inst_label] + 1
+
+    # inst_count = 0
+    inst_label = label_dict[inst_label] + '-' + str(inst_count)
+
+    print(inst_label)
 
     col_labels.append(inst_label)
 
@@ -112,13 +121,33 @@ def make_clust():
     for j in range(28):
       row_labels.append('pos_'+str(i)+'-'+str(j))
 
-  keep_cols = ['Zero-1', 'Zero-2']
+  # keep_cols = ['Zero-0','Zero-1','Zero-2','Zero-3','Zero-4','Zero-5','Zero-6','Zero-7','Zero-8','Zero-9']
+  keep_cols = []
 
+  # keep_cols.append('Zero-2')
+
+  # tmp_cols = []
+
+  random.seed(100)
+  for inst_digit in label_dict:
+    tmp_name = label_dict[inst_digit]
+
+    for i in range(10):
+      tmp = int(math.floor(random.random()*1000))
+      # tmp = 0
+      inst_name = tmp_name+'-'+str(tmp)
+      
+      keep_cols.append(inst_name)
+
+  print('tmp labels')
   df = pd.DataFrame(data = mat, index=row_labels, columns=col_labels)
+
 
   df = df[keep_cols]
 
   small_mat = df.values
+
+  print(df.shape)
 
   # import pdb; pdb.set_trace()
 
