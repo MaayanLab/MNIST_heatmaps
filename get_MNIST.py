@@ -132,9 +132,9 @@ def make_clust():
   for inst_digit in label_dict:
     tmp_name = label_dict[inst_digit]
 
-    for i in range(10):
-      tmp = int(math.floor(random.random()*1000))
-      # tmp = 0
+    for i in range(20):
+      # tmp = int(math.floor(random.random()*1000))
+      tmp = i
       inst_name = tmp_name+'-'+str(tmp)
       
       keep_cols.append(inst_name)
