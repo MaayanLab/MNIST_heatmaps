@@ -22,95 +22,132 @@ def make_clust():
 
   mnist_obj = loadmat('custom_data_home/mldata/mnist-original.mat')
 
-  digit_labels = mnist_obj['label']
+  digit_labels = mnist_obj['label'][0]
 
-  print(digit_labels)
+
+  label_dict = {}
+  label_dict[0] = 'Zero'
+  label_dict[1] = 'One'
+  label_dict[2] = 'Two'
+  label_dict[3] = 'Three'
+  label_dict[4] = 'Four'
+  label_dict[5] = 'Five'
+  label_dict[6] = 'Six'
+  label_dict[7] = 'Seven'
+  label_dict[8] = 'Eight'
+  label_dict[9] = 'Nine'
+
+  num_digit = {}
+  num_digit[0] = 0
+  num_digit[1] = 0
+  num_digit[2] = 0
+  num_digit[3] = 0
+  num_digit[4] = 0
+  num_digit[5] = 0
+  num_digit[6] = 0
+  num_digit[7] = 0
+  num_digit[8] = 0
+  num_digit[9] = 0
+
+  col_labels = []
+  keep_cols = []
+  for i in range(len(digit_labels)):
+
+    inst_label = digit_labels[i]
+
+    col_labels.append(label_dict[inst_label])
+
+  print(col_labels)
 
   # write matrix to file 
   mat = mnist_obj['data']
 
-  # # 0s 
+  # # # 0s 
+  # # col_num = 0
+
+  # # # 3s 
+  # # col_num = 20500
+
+  # # # 7 
+  # # col_num = 45000
+
+
   # col_num = 0
-
-  # # 3s 
-  # col_num = 20500
-
-  # # 7 
-  # col_num = 45000
-
-
-  col_num = 0
-  tmp_mat = mat[:,col_num:col_num+100]
-  small_mat = tmp_mat
+  # tmp_mat = mat[:,col_num:col_num+100]
+  # small_mat = tmp_mat
   
-  col_num = 20500
-  tmp_mat = mat[:,col_num:col_num+100]
-  small_mat = np.hstack((small_mat,tmp_mat))
+  # col_num = 20500
+  # tmp_mat = mat[:,col_num:col_num+100]
+  # small_mat = np.hstack((small_mat,tmp_mat))
 
-  col_num = 45000
-  tmp_mat = mat[:,col_num:col_num+100]
-  small_mat = np.hstack((small_mat,tmp_mat))  
-
-
-  small_size = small_mat.shape
-
-  num_zeros = small_size[1]
-
-  num_pixels = 784
+  # col_num = 45000
+  # tmp_mat = mat[:,col_num:col_num+100]
+  # small_mat = np.hstack((small_mat,tmp_mat))  
 
 
-  # write col names 
-  col_labels = []
-  for i in range(num_zeros):
-    if i < 100:
-      col_labels.append('Zero-'+str(i))
-    if i>= 100 and i < 200:
-      col_labels.append('Three-'+str(i))
-    if i>=200 and i < 300:
-      col_labels.append('Seven-'+str(i))
+  # small_size = small_mat.shape
 
-  # write col category 
+  # num_zeros = small_size[1]
 
-  print(len(col_labels))
-
-  row_labels = []
-  for i in range(28):
-    for j in range(28):
-      row_labels.append('pos_'+str(i)+'_'+str(j))
+  # num_pixels = 784
 
 
-  df = pd.DataFrame(data = small_mat, index=row_labels, columns=col_labels)
+  # # write col names 
+  # col_labels = []
+  # for i in range(num_zeros):
+  #   if i < 10:
+  #     col_labels.append('Zero-'+str(i))
+  #   if i>= 100 and i < 110:
+  #     col_labels.append('Three-'+str(i))
+  #   if i>=200 and i < 210:
+  #     col_labels.append('Seven-'+str(i))
 
-  # df.to_csv('example_matrix.txt',sep='\t')
+  # # write col category 
 
-  fw = open('MNIST_labels.txt','w')
+  # print('the number of columns ')
+  # print(len(col_labels))
 
-  # write names 
-  fw.write('\t')
-  for inst_name in col_labels:
-    fw.write(inst_name+'\t')
+  # row_labels = []
+  # for i in range(28):
+  #   for j in range(28):
+  #     row_labels.append('pos_'+str(i)+'_'+str(j))
 
-  # write categories 
-  fw.write('\n\t')
-  for inst_name in col_labels:
-    inst_cat = inst_name.split('-')[0]
-    fw.write(inst_cat+'\t')
 
-  fw.write('\n')
+  # df = pd.DataFrame(data = mat, index=row_labels, columns=col_labels)
 
-  for i in range(len(row_labels)):
-    row_data = small_mat[i,:]
+  # import pdb; pdb.set_trace()
 
-    print(row_data)
 
-    fw.write(row_labels[i]+'\t')
+  # # df.to_csv('example_matrix.txt',sep='\t')
 
-    for inst_data in row_data:
-      fw.write(str(inst_data)+'\t')
+  # fw = open('MNIST_labels.txt','w')
 
-    fw.write('\n')
+  # # write names 
+  # fw.write('\t')
+  # for inst_name in col_labels:
+  #   fw.write(inst_name+'\t')
 
-  fw.close()
+  # # write categories 
+  # fw.write('\n\t')
+  # for inst_name in col_labels:
+  #   inst_cat = inst_name.split('-')[0]
+  #   fw.write('Digit: '+inst_cat+'\t')
+
+  # fw.write('\n')
+
+  # for i in range(len(row_labels)):
+  #   row_data = small_mat[i,:]
+
+  #   # print(row_data)
+
+  #   fw.write(row_labels[i]+'\t')
+
+  #   for inst_data in row_data:
+  #     fw.write(str(inst_data)+'\t')
+
+  #   fw.write('\n')
+
+  # fw.close()
 
 
 def check_digit():
