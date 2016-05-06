@@ -50,14 +50,14 @@ def make_clust():
   num_digit[9] = 0
 
   col_labels = []
-  keep_cols = []
   for i in range(len(digit_labels)):
 
     inst_label = digit_labels[i]
 
-    col_labels.append(label_dict[inst_label])
+    inst_label = label_dict[inst_label] + '-' + str(i)
 
-  print(col_labels)
+    col_labels.append(inst_label)
+
 
   # write matrix to file 
   mat = mnist_obj['data']
@@ -107,47 +107,52 @@ def make_clust():
   # print('the number of columns ')
   # print(len(col_labels))
 
-  # row_labels = []
-  # for i in range(28):
-  #   for j in range(28):
-  #     row_labels.append('pos_'+str(i)+'_'+str(j))
+  row_labels = []
+  for i in range(28):
+    for j in range(28):
+      row_labels.append('pos_'+str(i)+'-'+str(j))
 
+  keep_cols = ['Zero-1', 'Zero-2']
 
-  # df = pd.DataFrame(data = mat, index=row_labels, columns=col_labels)
+  df = pd.DataFrame(data = mat, index=row_labels, columns=col_labels)
+
+  df = df[keep_cols]
+
+  small_mat = df.values
 
   # import pdb; pdb.set_trace()
 
 
-  # # df.to_csv('example_matrix.txt',sep='\t')
+  # df.to_csv('example_matrix.txt',sep='\t')
 
-  # fw = open('MNIST_labels.txt','w')
+  fw = open('MNIST_labels.txt','w')
 
-  # # write names 
-  # fw.write('\t')
-  # for inst_name in col_labels:
-  #   fw.write(inst_name+'\t')
+  # write names 
+  fw.write('\t')
+  for inst_name in keep_cols:
+    fw.write(inst_name+'\t')
 
-  # # write categories 
-  # fw.write('\n\t')
-  # for inst_name in col_labels:
-  #   inst_cat = inst_name.split('-')[0]
-  #   fw.write('Digit: '+inst_cat+'\t')
+  # write categories 
+  fw.write('\n\t')
+  for inst_name in keep_cols:
+    inst_cat = inst_name.split('-')[0]
+    fw.write('Digit: '+inst_cat+'\t')
 
-  # fw.write('\n')
+  fw.write('\n')
 
-  # for i in range(len(row_labels)):
-  #   row_data = small_mat[i,:]
+  for i in range(len(row_labels)):
+    row_data = small_mat[i,:]
 
-  #   # print(row_data)
+    # print(row_data)
 
-  #   fw.write(row_labels[i]+'\t')
+    fw.write(row_labels[i]+'\t')
 
-  #   for inst_data in row_data:
-  #     fw.write(str(inst_data)+'\t')
+    for inst_data in row_data:
+      fw.write(str(inst_data)+'\t')
 
-  #   fw.write('\n')
+    fw.write('\n')
 
-  # fw.close()
+  fw.close()
 
 
 def check_digit():
