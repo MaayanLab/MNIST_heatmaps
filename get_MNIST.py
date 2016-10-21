@@ -1,6 +1,6 @@
 def main():
   '''
-  There are 70,000 digits 
+  There are 70,000 digits
   Each digit is written in a 28x28 image = 784 pixels
   '''
 
@@ -16,10 +16,10 @@ def main():
   # print(tmp)
 
 def make_clust():
-  from scipy.io import loadmat 
-  import pandas as pd 
+  from scipy.io import loadmat
+  import pandas as pd
   import numpy as np
-  import random 
+  # import random
   import math
 
   mnist_obj = loadmat('custom_data_home/mldata/mnist-original.mat')
@@ -67,55 +67,10 @@ def make_clust():
 
     col_labels.append(inst_label)
 
-
-  # write matrix to file 
+  # write matrix to file
   mat = mnist_obj['data']
 
-  # # # 0s 
-  # # col_num = 0
-
-  # # # 3s 
-  # # col_num = 20500
-
-  # # # 7 
-  # # col_num = 45000
-
-
-  # col_num = 0
-  # tmp_mat = mat[:,col_num:col_num+100]
-  # small_mat = tmp_mat
-  
-  # col_num = 20500
-  # tmp_mat = mat[:,col_num:col_num+100]
-  # small_mat = np.hstack((small_mat,tmp_mat))
-
-  # col_num = 45000
-  # tmp_mat = mat[:,col_num:col_num+100]
-  # small_mat = np.hstack((small_mat,tmp_mat))  
-
-
-  # small_size = small_mat.shape
-
-  # num_zeros = small_size[1]
-
-  # num_pixels = 784
-
-
-  # # write col names 
-  # col_labels = []
-  # for i in range(num_zeros):
-  #   if i < 10:
-  #     col_labels.append('Zero-'+str(i))
-  #   if i>= 100 and i < 110:
-  #     col_labels.append('Three-'+str(i))
-  #   if i>=200 and i < 210:
-  #     col_labels.append('Seven-'+str(i))
-
-  # # write col category 
-
-  # print('the number of columns ')
-  # print(len(col_labels))
-
+  # construct row labels: 28x28 pixel image
   row_labels = []
   for i in range(28):
     for j in range(28):
@@ -124,11 +79,8 @@ def make_clust():
   # keep_cols = ['Zero-0','Zero-1','Zero-2','Zero-3','Zero-4','Zero-5','Zero-6','Zero-7','Zero-8','Zero-9']
   keep_cols = []
 
-  # keep_cols.append('Zero-2')
 
-  # tmp_cols = []
-
-  random.seed(100)
+  # random.seed(100)
   for inst_digit in label_dict:
     tmp_name = label_dict[inst_digit]
 
@@ -136,7 +88,7 @@ def make_clust():
       # tmp = int(math.floor(random.random()*1000))
       tmp = i
       inst_name = tmp_name+'-'+str(tmp)
-      
+
       keep_cols.append(inst_name)
 
   print('tmp labels')
@@ -156,12 +108,12 @@ def make_clust():
 
   fw = open('MNIST_labels.txt','w')
 
-  # write names 
+  # write names
   fw.write('\t')
   for inst_name in keep_cols:
     fw.write(inst_name+'\t')
 
-  # write categories 
+  # write categories
   fw.write('\n\t')
   for inst_name in keep_cols:
     inst_cat = inst_name.split('-')[0]
@@ -185,14 +137,14 @@ def make_clust():
 
 
 def check_digit():
-  from scipy.io import loadmat 
+  from scipy.io import loadmat
   mnist_obj = loadmat('custom_data_home/mldata/mnist-original.mat')
 
   mat = mnist_obj['data']
 
   print(mat.shape)
 
-  # 7 
+  # 7
   # inst_digit = 45000
 
   # # 3: 20500
@@ -231,7 +183,7 @@ def check_digit():
   f.close()
 
 def overview_mnist_mat():
-  from scipy.io import loadmat 
+  from scipy.io import loadmat
   mat = loadmat('custom_data_home/mldata/mnist-original.mat')
 
   print(mat.keys())
@@ -251,7 +203,7 @@ def overview_mnist_mat():
   print('\n\nglobals')
   print(mat['__globals__'])
 
-def download_mnist_from_server():  
+def download_mnist_from_server():
   from sklearn.datasets import fetch_mldata
 
   mnist = fetch_mldata('MNIST original', data_home='custom_data_home')
