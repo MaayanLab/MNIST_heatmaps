@@ -4,16 +4,11 @@ def main():
   Each digit is written in a 28x28 image = 784 pixels
   '''
 
-
   # overview_mnist_mat()
 
   # check_digit()
 
   make_clust()
-
-  # tmp = range(28)
-  # tmp = [i - 13.5 for i in tmp]
-  # print(tmp)
 
 def make_clust():
   from scipy.io import loadmat
@@ -63,8 +58,6 @@ def make_clust():
     # inst_count = 0
     inst_label = label_dict[inst_label] + '-' + str(inst_count)
 
-    print(inst_label)
-
     col_labels.append(inst_label)
 
   # write matrix to file
@@ -91,11 +84,12 @@ def make_clust():
 
       keep_cols.append(inst_name)
 
-  print('tmp labels')
   df = pd.DataFrame(data = mat, index=row_labels, columns=col_labels)
 
 
   df = df[keep_cols]
+
+  # add categories to columns
 
   small_mat = df.values
 
@@ -104,36 +98,38 @@ def make_clust():
   # import pdb; pdb.set_trace()
 
 
-  # df.to_csv('example_matrix.txt',sep='\t')
+  df.to_csv('MNIST_labels.txt',sep='\t')
 
-  fw = open('MNIST_labels.txt','w')
+  # # manually write file
+  # #########################
+  # fw = open('MNIST_labels.txt','w')
 
-  # write names
-  fw.write('\t')
-  for inst_name in keep_cols:
-    fw.write(inst_name+'\t')
+  # # write names
+  # fw.write('\t')
+  # for inst_name in keep_cols:
+  #   fw.write(inst_name+'\t')
 
-  # write categories
-  fw.write('\n\t')
-  for inst_name in keep_cols:
-    inst_cat = inst_name.split('-')[0]
-    fw.write('Digit: '+inst_cat+'\t')
+  # # write categories
+  # fw.write('\n\t')
+  # for inst_name in keep_cols:
+  #   inst_cat = inst_name.split('-')[0]
+  #   fw.write('Digit: '+inst_cat+'\t')
 
-  fw.write('\n')
+  # fw.write('\n')
 
-  for i in range(len(row_labels)):
-    row_data = small_mat[i,:]
+  # for i in range(len(row_labels)):
+  #   row_data = small_mat[i,:]
 
-    # print(row_data)
+  #   # print(row_data)
 
-    fw.write(row_labels[i]+'\t')
+  #   fw.write(row_labels[i]+'\t')
 
-    for inst_data in row_data:
-      fw.write(str(inst_data)+'\t')
+  #   for inst_data in row_data:
+  #     fw.write(str(inst_data)+'\t')
 
-    fw.write('\n')
+  #   fw.write('\n')
 
-  fw.close()
+  # fw.close()
 
 
 def check_digit():
