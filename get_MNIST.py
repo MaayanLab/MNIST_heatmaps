@@ -90,47 +90,32 @@ def make_clust():
   df = df[keep_cols]
 
   # add categories to columns
+  ###############################
+  new_col_labels = df.columns.tolist()
 
-  small_mat = df.values
+  tuple_col_labels = []
+  for inst_label in new_col_labels:
+    # add number name
+    inst_name = 'Numbers: ' + inst_label
+    # add category name
+    inst_cat = 'Digit: ' + inst_label.split('-')[0]
+    inst_tuple = ( inst_name, inst_cat )
+    tuple_col_labels.append(inst_tuple)
+
+  df.columns = tuple_col_labels
+
+  # add row categories
+  new_row_labels = df.index.tolist()
+  tuple_row_labels = []
+
+  for inst_row in new_row_labels:
+    tuple_row_labels.append('Pixels: '+ inst_row)
+
+  df.index = tuple_row_labels
 
   print(df.shape)
 
-  # import pdb; pdb.set_trace()
-
-
   df.to_csv('MNIST_labels.txt',sep='\t')
-
-  # # manually write file
-  # #########################
-  # fw = open('MNIST_labels.txt','w')
-
-  # # write names
-  # fw.write('\t')
-  # for inst_name in keep_cols:
-  #   fw.write(inst_name+'\t')
-
-  # # write categories
-  # fw.write('\n\t')
-  # for inst_name in keep_cols:
-  #   inst_cat = inst_name.split('-')[0]
-  #   fw.write('Digit: '+inst_cat+'\t')
-
-  # fw.write('\n')
-
-  # for i in range(len(row_labels)):
-  #   row_data = small_mat[i,:]
-
-  #   # print(row_data)
-
-  #   fw.write(row_labels[i]+'\t')
-
-  #   for inst_data in row_data:
-  #     fw.write(str(inst_data)+'\t')
-
-  #   fw.write('\n')
-
-  # fw.close()
-
 
 def check_digit():
   from scipy.io import loadmat
