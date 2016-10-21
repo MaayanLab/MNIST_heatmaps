@@ -105,11 +105,27 @@ def make_clust():
   df.columns = tuple_col_labels
 
   # add row categories
+  ###############################
   new_row_labels = df.index.tolist()
   tuple_row_labels = []
 
+  max_radius = np.sqrt( np.square(28) + np.square(28) )
+
   for inst_row in new_row_labels:
-    tuple_row_labels.append('Pixels: '+ inst_row)
+
+    # make name
+    inst_name = 'Pixels: '+ inst_row
+
+    # make radius category
+    pos = inst_row.split('pos_')[1]
+    inst_x = int(pos.split('-')[0])
+    inst_y = int(pos.split('-')[1])
+    inst_radius = max_radius - np.sqrt( np.square(inst_x) + np.square(inst_y) )
+    inst_cat = 'Center: '+ str(inst_radius)
+
+    inst_tuple = ( inst_name, inst_cat )
+
+    tuple_row_labels.append(inst_tuple)
 
   df.index = tuple_row_labels
 
