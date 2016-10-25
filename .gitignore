@@ -71,3 +71,8 @@ clustergrammer
 # git rm -r --cached .
 # git add .
 # git commit -m "fixing .gitignore"
+
+
+# ignore large files
+######################
+processed_MNIST

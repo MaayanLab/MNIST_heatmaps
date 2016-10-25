@@ -8,9 +8,11 @@ def main():
 
   # check_digit()
 
+  # save_processed_MNIST()
+
   make_clust()
 
-def make_clust():
+def save_processed_MNIST():
   from scipy.io import loadmat
   import pandas as pd
   import numpy as np
@@ -67,30 +69,43 @@ def make_clust():
   # write matrix to file
   mat = mnist_obj['data']
 
+  print('shape of MNIST data')
+  print(mat.shape)
+
   # construct row labels: 28x28 pixel image
   row_labels = []
   for i in range(28):
     for j in range(28):
       row_labels.append('pos_'+str(i)+'-'+str(j))
 
-  # keep_cols = ['Zero-0','Zero-1','Zero-2','Zero-3','Zero-4','Zero-5','Zero-6','Zero-7','Zero-8','Zero-9']
+  # only keep 20 instances of each numbers
+  ###########################################
   keep_cols = []
 
-
-  # random.seed(100)
   for inst_digit in label_dict:
     tmp_name = label_dict[inst_digit]
 
+    # select 20 instances of each digit
     for i in range(20):
-      # tmp = int(math.floor(random.random()*1000))
-      tmp = i
-      inst_name = tmp_name+'-'+str(tmp)
-
+      inst_name = tmp_name+'-'+str(i)
       keep_cols.append(inst_name)
 
+  # load full data into dataframe
   df = pd.DataFrame(data = mat, index=row_labels, columns=col_labels)
 
+  print(df.shape)
 
+  # save copy of full data
+  df.to_csv('processed_MNIST/MNIST_row_labels.txt', sep='\t')
+
+def make_clust():
+  from clustergrammer import Network
+  net = Network()
+  net.load_file('processed_MNIST/MNIST_row_labels.txt')
+  tmp_df = net.dat_to_df()
+  df = tmp_df['mat']
+
+  # grab subset of numbers
   df = df[keep_cols]
 
   # add categories to columns
