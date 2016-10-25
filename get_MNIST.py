@@ -21,6 +21,7 @@ def make_clust():
 
   digit_labels = mnist_obj['label'][0]
 
+  print(len(digit_labels))
 
   label_dict = {}
   label_dict[0] = 'Zero'
@@ -59,6 +60,9 @@ def make_clust():
     inst_label = label_dict[inst_label] + '-' + str(inst_count)
 
     col_labels.append(inst_label)
+
+  print('number of instances of each digit')
+  print(num_digit)
 
   # write matrix to file
   mat = mnist_obj['data']
