@@ -75,4 +75,4 @@ clustergrammer
 
 # ignore large files
 ######################
-processed_MNIST
+processed_MNIST/large_files/*

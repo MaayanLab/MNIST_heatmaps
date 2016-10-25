@@ -85,7 +85,7 @@ def save_processed_MNIST():
 def make_clust():
   from clustergrammer import Network
   net = Network()
-  net.load_file('processed_MNIST/MNIST_row_labels.txt')
+  net.load_file('processed_MNIST/large_files/MNIST_row_labels.txt')
   tmp_df = net.dat_to_df()
   df = tmp_df['mat']
 
