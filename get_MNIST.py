@@ -78,22 +78,6 @@ def save_processed_MNIST():
     for j in range(28):
       row_labels.append('pos_'+str(i)+'-'+str(j))
 
-  # only keep 20 instances of each numbers
-  ###########################################
-  keep_cols = []
-
-  for inst_digit in label_dict:
-    tmp_name = label_dict[inst_digit]
-
-    # select 20 instances of each digit
-    for i in range(20):
-      inst_name = tmp_name+'-'+str(i)
-      keep_cols.append(inst_name)
-
-  # load full data into dataframe
-  df = pd.DataFrame(data = mat, index=row_labels, columns=col_labels)
-
-  print(df.shape)
 
   # save copy of full data
   df.to_csv('processed_MNIST/MNIST_row_labels.txt', sep='\t')
@@ -105,52 +89,70 @@ def make_clust():
   tmp_df = net.dat_to_df()
   df = tmp_df['mat']
 
-  # grab subset of numbers
-  df = df[keep_cols]
-
-  # add categories to columns
-  ###############################
-  new_col_labels = df.columns.tolist()
-
-  tuple_col_labels = []
-  for inst_label in new_col_labels:
-    # add number name
-    inst_name = 'Numbers: ' + inst_label
-    # add category name
-    inst_cat = 'Digit: ' + inst_label.split('-')[0]
-    inst_tuple = ( inst_name, inst_cat )
-    tuple_col_labels.append(inst_tuple)
-
-  df.columns = tuple_col_labels
-
-  # add row categories
-  ###############################
-  new_row_labels = df.index.tolist()
-  tuple_row_labels = []
-
-  max_radius = np.sqrt( np.square(28) + np.square(28) )
-
-  for inst_row in new_row_labels:
-
-    # make name
-    inst_name = 'Pixels: '+ inst_row
-
-    # make radius category
-    pos = inst_row.split('pos_')[1]
-    inst_x = int(pos.split('-')[0])
-    inst_y = int(pos.split('-')[1])
-    inst_radius = max_radius - np.sqrt( np.square(inst_x) + np.square(inst_y) )
-    inst_cat = 'Center: '+ str(inst_radius)
-
-    inst_tuple = ( inst_name, inst_cat )
-
-    tuple_row_labels.append(inst_tuple)
-
-  df.index = tuple_row_labels
-
   print(df.shape)
 
-  df.to_csv('MNIST_labels.txt',sep='\t')
+  # # only keep 20 instances of each numbers
+  # ###########################################
+  # keep_cols = []
+
+  # for inst_digit in label_dict:
+  #   tmp_name = label_dict[inst_digit]
+
+  #   # select 20 instances of each digit
+  #   for i in range(20):
+  #     inst_name = tmp_name+'-'+str(i)
+  #     keep_cols.append(inst_name)
+
+  # # load full data into dataframe
+  # df = pd.DataFrame(data = mat, index=row_labels, columns=col_labels)
+
+
+  # # grab subset of numbers
+  # df = df[keep_cols]
+
+  # # add categories to columns
+  # ###############################
+  # new_col_labels = df.columns.tolist()
+
+  # tuple_col_labels = []
+  # for inst_label in new_col_labels:
+  #   # add number name
+  #   inst_name = 'Numbers: ' + inst_label
+  #   # add category name
+  #   inst_cat = 'Digit: ' + inst_label.split('-')[0]
+  #   inst_tuple = ( inst_name, inst_cat )
+  #   tuple_col_labels.append(inst_tuple)
+
+  # df.columns = tuple_col_labels
+
+  # # add row categories
+  # ###############################
+  # new_row_labels = df.index.tolist()
+  # tuple_row_labels = []
+
+  # max_radius = np.sqrt( np.square(28) + np.square(28) )
+
+  # for inst_row in new_row_labels:
+
+  #   # make name
+  #   inst_name = 'Pixels: '+ inst_row
+
+  #   # make radius category
+  #   pos = inst_row.split('pos_')[1]
+  #   inst_x = int(pos.split('-')[0])
+  #   inst_y = int(pos.split('-')[1])
+  #   inst_radius = max_radius - np.sqrt( np.square(inst_x) + np.square(inst_y) )
+  #   inst_cat = 'Center: '+ str(inst_radius)
+
+  #   inst_tuple = ( inst_name, inst_cat )
+
+  #   tuple_row_labels.append(inst_tuple)
+
+  # df.index = tuple_row_labels
+
+  # print(df.shape)
+
+  # df.to_csv('MNIST_labels.txt',sep='\t')
 
 def check_digit():
   from scipy.io import loadmat
