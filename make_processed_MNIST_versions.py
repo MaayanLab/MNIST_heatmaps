@@ -6,33 +6,51 @@ def main():
 
   # subsample_MNIST()
 
-  toy_subsample()
+  generate_subsampled_datasets()
 
-def toy_subsample():
-  print('running toy subsampling on small dataset')
-
+def generate_subsampled_datasets():
+  '''
+  This will generate subsampled tsvs from the MNIST dataset
+  '''
   from clustergrammer import Network
-  import random
 
   net = Network()
   net.load_file('processed_MNIST/MNIST_30x_original.txt')
   tmp_df = net.dat_to_df()
   df = tmp_df['mat']
 
-  num_sample = 120
+  sample_num = 20
+  sample_repeats = 3
+  df_subs = take_multiple_subsamples(df, sample_num, sample_repeats)
+
+  print('--------------')
+  print('checking outside of take_multiple_subsamples')
+  print(df_subs.keys())
+
+  for inst_subsample in df_subs:
+    inst_df = df_subs[inst_subsample]
+
+    print(inst_df.shape)
+
+
+def take_multiple_subsamples(df, sample_num, sample_repeats):
+  '''
+  Take multiple subsamples of a dataset without replacement. This ensures that
+  each subsample contains independent data.
+  '''
+  import random
   random.seed(50)
 
-  subsets = {}
+  # dictionary of subsets of dataframe
+  df_subs = {}
 
-  for i in range(2):
+  for i in range(sample_repeats):
 
     subset_seed = int(10000*random.random())
 
-    inst_sub = df.sample(n=num_sample, axis=1, random_state=subset_seed)
+    df_subs[i] = df.sample(n=sample_num, axis=1, random_state=subset_seed)
 
-    sampled_cols = inst_sub.columns.tolist()
-
-    subsets[i] = sampled_cols
+    sampled_cols = df_subs[i].columns.tolist()
 
     # remove already sampled columns
     all_cols = df.columns.tolist()
@@ -40,10 +58,8 @@ def toy_subsample():
 
     df = df[keep_cols]
 
-  print(subsets[0])
-  print(subsets[1])
-
-  print(len(list(set(subsets[0]+subsets[1]))))
+  print(df_subs.keys())
+  return df_subs
 
 def subsample_MNIST():
 
