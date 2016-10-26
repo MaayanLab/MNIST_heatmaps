@@ -4,7 +4,7 @@ def main():
   Each digit is written in a 28x28 image = 784 pixels
   '''
 
-  # subsample_MNIST()
+  # equal_digit_sampling_MNIST()
 
   generate_subsampled_datasets()
 
@@ -15,23 +15,28 @@ def generate_subsampled_datasets():
   from clustergrammer import Network
 
   net = Network()
-  net.load_file('processed_MNIST/equal_digit_sampling/MNIST_30_digits_original.txt')
+  # load full MNIST data with row labels
+  net.load_file('processed_MNIST/large_files/MNIST_row_labels.txt')
   tmp_df = net.dat_to_df()
   df = tmp_df['mat']
 
-  sample_num = 20
-  sample_repeats = 3
-  df_subs = take_multiple_subsamples(df, sample_num, sample_repeats)
+  all_sample_nums = [20, 100, 200, 300, 400, 500, 1000]
+  sample_repeats = 5
 
-  for inst_subsample in df_subs:
-    inst_df = df_subs[inst_subsample]
+  for sample_num in all_sample_nums:
 
-    inst_df = add_MNIST_cats(inst_df)
+    df_subs = take_multiple_subsamples(df, sample_num, sample_repeats)
 
-    inst_filename = 'processed_MNIST/random_subsampling/MNIST_' \
-                    +str(sample_num)+'x_random_subsample_'+str(inst_subsample)+'.txt'
+    for inst_subsample in df_subs:
+      inst_df = df_subs[inst_subsample]
 
-    inst_df.to_csv(inst_filename, sep='\t')
+      inst_df = add_MNIST_cats(inst_df, row_cats=False)
+
+      inst_filename = 'processed_MNIST/random_subsampling/MNIST_' \
+                      +str(sample_num)+'x_random_subsample_'+str(inst_subsample)+'.txt'
+
+      print(inst_df.shape)
+      inst_df.to_csv(inst_filename, sep='\t')
 
 
 def take_multiple_subsamples(df, sample_num, sample_repeats):
@@ -61,7 +66,10 @@ def take_multiple_subsamples(df, sample_num, sample_repeats):
 
   return df_subs
 
-def subsample_MNIST():
+def equal_digit_sampling_MNIST():
+  '''
+  Sample N instances of each digit from the MNIST dataset
+  '''
 
   from clustergrammer import Network
   net = Network()
@@ -99,48 +107,50 @@ def subsample_MNIST():
 
 
 
-def add_MNIST_cats(df):
+def add_MNIST_cats(df, row_cats=True, col_cats=True):
   import numpy as np
 
-  # add categories to columns
-  ###############################
-  old_col_labels = df.columns.tolist()
+  if col_cats:
+    # add categories to columns
+    ###############################
+    old_col_labels = df.columns.tolist()
 
-  tuple_col_labels = []
-  for inst_label in old_col_labels:
-    # add number name
-    inst_name = 'Numbers: ' + inst_label
-    # add category name
-    inst_cat = 'Digit: ' + inst_label.split('-')[0]
-    inst_tuple = ( inst_name, inst_cat )
-    tuple_col_labels.append(inst_tuple)
+    tuple_col_labels = []
+    for inst_label in old_col_labels:
+      # add number name
+      inst_name = 'Numbers: ' + inst_label
+      # add category name
+      inst_cat = 'Digit: ' + inst_label.split('-')[0]
+      inst_tuple = ( inst_name, inst_cat )
+      tuple_col_labels.append(inst_tuple)
 
-  df.columns = tuple_col_labels
+    df.columns = tuple_col_labels
 
-  # add row categories
-  ###############################
-  new_row_labels = df.index.tolist()
-  tuple_row_labels = []
+  if row_cats:
+    # add row categories
+    ###############################
+    new_row_labels = df.index.tolist()
+    tuple_row_labels = []
 
-  max_radius = np.sqrt( np.square(28) + np.square(28) )
+    max_radius = np.sqrt( np.square(28) + np.square(28) )
 
-  for inst_row in new_row_labels:
+    for inst_row in new_row_labels:
 
-    # make name
-    inst_name = 'Pixels: '+ inst_row
+      # make name
+      inst_name = 'Pixels: '+ inst_row
 
-    # make radius category
-    pos = inst_row.split('pos_')[1]
-    inst_x = int(pos.split('-')[0])
-    inst_y = int(pos.split('-')[1])
-    inst_radius = max_radius - np.sqrt( np.square(inst_x) + np.square(inst_y) )
-    inst_cat = 'Center: '+ str(inst_radius)
+      # make radius category
+      pos = inst_row.split('pos_')[1]
+      inst_x = int(pos.split('-')[0])
+      inst_y = int(pos.split('-')[1])
+      inst_radius = max_radius - np.sqrt( np.square(inst_x) + np.square(inst_y) )
+      inst_cat = 'Center: '+ str(inst_radius)
 
-    inst_tuple = ( inst_name, inst_cat )
+      inst_tuple = ( inst_name, inst_cat )
 
-    tuple_row_labels.append(inst_tuple)
+      tuple_row_labels.append(inst_tuple)
 
-  df.index = tuple_row_labels
+    df.index = tuple_row_labels
 
   return df
 

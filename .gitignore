@@ -76,3 +76,4 @@ clustergrammer
 # ignore large files
 ######################
 processed_MNIST/large_files/*
+processed_MNIST/random_subsampling/*
