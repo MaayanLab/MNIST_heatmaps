@@ -15,7 +15,7 @@ def generate_subsampled_datasets():
   from clustergrammer import Network
 
   net = Network()
-  net.load_file('processed_MNIST/MNIST_30x_original.txt')
+  net.load_file('processed_MNIST/equal_digit_sampling/MNIST_30_digits_original.txt')
   tmp_df = net.dat_to_df()
   df = tmp_df['mat']
 
@@ -23,19 +23,15 @@ def generate_subsampled_datasets():
   sample_repeats = 3
   df_subs = take_multiple_subsamples(df, sample_num, sample_repeats)
 
-  print('--------------')
-  print('checking outside of take_multiple_subsamples')
-  print(df_subs.keys())
-
   for inst_subsample in df_subs:
     inst_df = df_subs[inst_subsample]
 
-    inst_df = add_MNIST_labels(inst_df)
+    inst_df = add_MNIST_cats(inst_df)
 
-    print('\n---------------------')
-    print(inst_df.shape)
-    print(inst_df.columns.tolist())
-    print(inst_df.index.tolist())
+    inst_filename = 'processed_MNIST/random_subsampling/MNIST_' \
+                    +str(sample_num)+'x_random_subsample_'+str(inst_subsample)+'.txt'
+
+    inst_df.to_csv(inst_filename, sep='\t')
 
 
 def take_multiple_subsamples(df, sample_num, sample_repeats):
@@ -63,7 +59,6 @@ def take_multiple_subsamples(df, sample_num, sample_repeats):
 
     df = df[keep_cols]
 
-  print(df_subs.keys())
   return df_subs
 
 def subsample_MNIST():
@@ -95,7 +90,7 @@ def subsample_MNIST():
   # grab subset of numbers
   df = df[keep_cols]
 
-  df = add_MNIST_labels()
+  df = add_MNIST_cats()
 
   print('shape after processing')
   print(df.shape)
@@ -104,7 +99,7 @@ def subsample_MNIST():
 
 
 
-def add_MNIST_labels(df):
+def add_MNIST_cats(df):
   import numpy as np
 
   # add categories to columns
