@@ -30,7 +30,12 @@ def generate_subsampled_datasets():
   for inst_subsample in df_subs:
     inst_df = df_subs[inst_subsample]
 
+    inst_df = add_MNIST_labels(inst_df)
+
+    print('\n---------------------')
     print(inst_df.shape)
+    print(inst_df.columns.tolist())
+    print(inst_df.index.tolist())
 
 
 def take_multiple_subsamples(df, sample_num, sample_repeats):
@@ -90,45 +95,7 @@ def subsample_MNIST():
   # grab subset of numbers
   df = df[keep_cols]
 
-  # # add categories to columns
-  # ###############################
-  # new_col_labels = df.columns.tolist()
-
-  # tuple_col_labels = []
-  # for inst_label in new_col_labels:
-  #   # add number name
-  #   inst_name = 'Numbers: ' + inst_label
-  #   # add category name
-  #   inst_cat = 'Digit: ' + inst_label.split('-')[0]
-  #   inst_tuple = ( inst_name, inst_cat )
-  #   tuple_col_labels.append(inst_tuple)
-
-  # df.columns = tuple_col_labels
-
-  # # add row categories
-  # ###############################
-  # new_row_labels = df.index.tolist()
-  # tuple_row_labels = []
-
-  # max_radius = np.sqrt( np.square(28) + np.square(28) )
-
-  # for inst_row in new_row_labels:
-
-  #   # make name
-  #   inst_name = 'Pixels: '+ inst_row
-
-  #   # make radius category
-  #   pos = inst_row.split('pos_')[1]
-  #   inst_x = int(pos.split('-')[0])
-  #   inst_y = int(pos.split('-')[1])
-  #   inst_radius = max_radius - np.sqrt( np.square(inst_x) + np.square(inst_y) )
-  #   inst_cat = 'Center: '+ str(inst_radius)
-
-  #   inst_tuple = ( inst_name, inst_cat )
-
-  #   tuple_row_labels.append(inst_tuple)
-
-  # df.index = tuple_row_labels
+  df = add_MNIST_labels()
 
   print('shape after processing')
   print(df.shape)
@@ -137,6 +104,50 @@ def subsample_MNIST():
 
 
 
+def add_MNIST_labels(df):
+  import numpy as np
+
+  # add categories to columns
+  ###############################
+  old_col_labels = df.columns.tolist()
+
+  tuple_col_labels = []
+  for inst_label in old_col_labels:
+    # add number name
+    inst_name = 'Numbers: ' + inst_label
+    # add category name
+    inst_cat = 'Digit: ' + inst_label.split('-')[0]
+    inst_tuple = ( inst_name, inst_cat )
+    tuple_col_labels.append(inst_tuple)
+
+  df.columns = tuple_col_labels
+
+  # add row categories
+  ###############################
+  new_row_labels = df.index.tolist()
+  tuple_row_labels = []
+
+  max_radius = np.sqrt( np.square(28) + np.square(28) )
+
+  for inst_row in new_row_labels:
+
+    # make name
+    inst_name = 'Pixels: '+ inst_row
+
+    # make radius category
+    pos = inst_row.split('pos_')[1]
+    inst_x = int(pos.split('-')[0])
+    inst_y = int(pos.split('-')[1])
+    inst_radius = max_radius - np.sqrt( np.square(inst_x) + np.square(inst_y) )
+    inst_cat = 'Center: '+ str(inst_radius)
+
+    inst_tuple = ( inst_name, inst_cat )
+
+    tuple_row_labels.append(inst_tuple)
+
+  df.index = tuple_row_labels
+
+  return df
 
 
 def download_mnist_from_server():
