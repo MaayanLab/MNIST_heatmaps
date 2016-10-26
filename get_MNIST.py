@@ -25,17 +25,7 @@ def save_processed_MNIST():
 
   print(len(digit_labels))
 
-  label_dict = {}
-  label_dict[0] = 'Zero'
-  label_dict[1] = 'One'
-  label_dict[2] = 'Two'
-  label_dict[3] = 'Three'
-  label_dict[4] = 'Four'
-  label_dict[5] = 'Five'
-  label_dict[6] = 'Six'
-  label_dict[7] = 'Seven'
-  label_dict[8] = 'Eight'
-  label_dict[9] = 'Nine'
+  label_dict = get_label_dict()
 
   num_digit = {}
   num_digit[0] = 0
@@ -78,11 +68,11 @@ def save_processed_MNIST():
     for j in range(28):
       row_labels.append('pos_'+str(i)+'-'+str(j))
 
-
   # save copy of full data
   df.to_csv('processed_MNIST/MNIST_row_labels.txt', sep='\t')
 
 def make_clust():
+
   from clustergrammer import Network
   net = Network()
   net.load_file('processed_MNIST/large_files/MNIST_row_labels.txt')
@@ -91,24 +81,22 @@ def make_clust():
 
   print(df.shape)
 
-  # # only keep 20 instances of each numbers
-  # ###########################################
-  # keep_cols = []
+  label_dict = get_label_dict()
 
-  # for inst_digit in label_dict:
-  #   tmp_name = label_dict[inst_digit]
+  # only keep 20 instances of each numbers
+  ###########################################
+  keep_cols = []
 
-  #   # select 20 instances of each digit
-  #   for i in range(20):
-  #     inst_name = tmp_name+'-'+str(i)
-  #     keep_cols.append(inst_name)
+  for inst_digit in label_dict:
+    tmp_name = label_dict[inst_digit]
 
-  # # load full data into dataframe
-  # df = pd.DataFrame(data = mat, index=row_labels, columns=col_labels)
+    # select 20 instances of each digit
+    for i in range(20):
+      inst_name = tmp_name+'-'+str(i)
+      keep_cols.append(inst_name)
 
-
-  # # grab subset of numbers
-  # df = df[keep_cols]
+  # grab subset of numbers
+  df = df[keep_cols]
 
   # # add categories to columns
   # ###############################
@@ -150,9 +138,10 @@ def make_clust():
 
   # df.index = tuple_row_labels
 
-  # print(df.shape)
+  print('shape after processing')
+  print(df.shape)
 
-  # df.to_csv('MNIST_labels.txt',sep='\t')
+  df.to_csv('processed_MNIST/MNIST_20x.txt',sep='\t')
 
 def check_digit():
   from scipy.io import loadmat
@@ -227,5 +216,20 @@ def download_mnist_from_server():
   mnist = fetch_mldata('MNIST original', data_home='custom_data_home')
 
   print(mnist.shape)
+
+def get_label_dict():
+  label_dict = {}
+  label_dict[0] = 'Zero'
+  label_dict[1] = 'One'
+  label_dict[2] = 'Two'
+  label_dict[3] = 'Three'
+  label_dict[4] = 'Four'
+  label_dict[5] = 'Five'
+  label_dict[6] = 'Six'
+  label_dict[7] = 'Seven'
+  label_dict[8] = 'Eight'
+  label_dict[9] = 'Nine'
+
+  return label_dict
 
 main()
