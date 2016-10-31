@@ -1,13 +1,21 @@
 def main():
-  print('here')
 
+  inst_file = 'MNIST_20x_random_subsample_0.txt'
+  dm_1 = get_dist_mat_from_file(inst_file)
+
+  inst_file = 'MNIST_20x_random_subsample_1.txt'
+  dm_2 = get_dist_mat_from_file(inst_file)
+
+  print(len(dm_1))
+  print(len(dm_2))
+
+def get_dist_mat_from_file(inst_file):
   from scipy.spatial.distance import pdist, squareform
   import numpy as np
   from clustergrammer import Network
+  from copy import deepcopy
 
-  inst_file = 'MNIST_20x_random_subsample_0.txt'
-
-  net = Network()
+  net = deepcopy(Network())
   net.load_file('processed_MNIST/random_subsampling/'+inst_file)
   tmp_df = net.dat_to_df()
   df = tmp_df['mat']
@@ -20,19 +28,6 @@ def main():
   # try col first
   inst_dm = pdist(mat, metric=dist_type)
 
-  inst_dm = squareform(inst_dm)
-
-  print(inst_dm)
-
-  print(inst_dm.shape)
-
-  print(np.sum(inst_dm))
-
-  # if inst_rc == 'row':
-  #   inst_dm = pdist(mat, metric=dist_type)
-  # elif inst_rc == 'col':
-  #   inst_dm = pdist(mat.transpose(), metric=dist_type)
-
-  # inst_dm[inst_dm < 0] = float(0)
+  return inst_dm
 
 main()
