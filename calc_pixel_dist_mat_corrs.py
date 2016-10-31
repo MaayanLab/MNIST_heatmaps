@@ -4,14 +4,12 @@ def main():
 
   calc_pixel_dist_full_MNIST()
 
-
-
 def calc_pixel_dist_full_MNIST():
   import pandas as pd
   from scipy.spatial.distance import pdist
 
-  # filename = 'processed_MNIST/large_files/MNIST_row_labels.txt'
-  filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
+  filename = 'processed_MNIST/large_files/MNIST_row_labels.txt'
+  # filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
 
   df = load_df_using_clustergrammer(filename)
   print('shape of full MNIST data')
@@ -22,7 +20,7 @@ def calc_pixel_dist_full_MNIST():
   mat = df.as_matrix()
   inst_dm = pdist(mat, metric='euclidean')
 
-  filename = 'processed_MNIST/pixel_distance_correlations/tmp.txt'
+  filename = 'processed_MNIST/pixel_distance_correlations/pixel-pixel_full_MNIST_dist-mat_eucl.txt'
 
   print('\nshape of calculated distance matrix')
   print(inst_dm.shape)
