@@ -1,9 +1,46 @@
 def main():
 
-  calc_pixel_dist_full_MNIST()
-  df =  load_pixel_dist_full_MNIST()
+  # calc_pixel_dist_full_MNIST()
 
-  # compare_subsamples()
+
+  compare_subsamples()
+
+
+def compare_subsamples():
+  from scipy.stats import pearsonr
+  import pandas as pd
+
+  import numpy as np
+  from scipy.spatial.distance import pdist, squareform
+
+
+  df_full =  load_pixel_dist_full_MNIST()
+  dm_full = df_full.as_matrix()
+  dm_full = dm_full[:,0]
+
+  sample_size = 20
+
+  for sample_num_2 in range(4):
+    # sample_num_1 = 0
+
+    # inst_file = 'MNIST_'+str(sample_size)+'x_random_subsample_'+ \
+    #              str(sample_num_1)+'.txt'
+
+    # dm_1 = get_dist_mat_from_file(inst_file)
+    print('here')
+
+    inst_file = 'MNIST_'+str(sample_size)+'x_random_subsample_'+ \
+                 str(sample_num_2)+'.txt'
+    dm_2 = get_dist_mat_from_file(inst_file)
+
+    print(type(dm_2))
+    print(type(dm_full))
+
+    print(dm_full.shape)
+    print(dm_2.shape)
+
+    pr_results = pearsonr(dm_full, dm_2)
+    print(pr_results)
 
 
 
@@ -50,30 +87,6 @@ def load_pixel_dist_full_MNIST():
   print(read_df.shape)
 
   return read_df
-
-def compare_subsamples():
-  from scipy.stats import pearsonr
-  import pandas as pd
-
-  from scipy.spatial.distance import pdist, squareform
-
-  sample_size = 1000
-
-  for sample_num_2 in range(4):
-    sample_num_1 = 0
-
-    inst_file = 'MNIST_'+str(sample_size)+'x_random_subsample_'+ \
-                 str(sample_num_1)+'.txt'
-
-    dm_1 = get_dist_mat_from_file(inst_file)
-
-    inst_file = 'MNIST_'+str(sample_size)+'x_random_subsample_'+ \
-                 str(sample_num_2)+'.txt'
-    dm_2 = get_dist_mat_from_file(inst_file)
-
-    pr_results = pearsonr(dm_1, dm_2)
-    print(pr_results)
-
 
 def get_dist_mat_from_file(inst_file):
   from scipy.spatial.distance import pdist, squareform
