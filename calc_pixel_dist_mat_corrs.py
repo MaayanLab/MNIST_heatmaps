@@ -1,6 +1,6 @@
 def main():
 
-  compare_subsamples()
+  # compare_subsamples()
 
   calc_pixel_dist_full_MNIST()
 
@@ -8,22 +8,36 @@ def main():
 
 def calc_pixel_dist_full_MNIST():
   import pandas as pd
+  from scipy.spatial.distance import pdist
+
   # filename = 'processed_MNIST/large_files/MNIST_row_labels.txt'
-  filename = 'processed_MNIST/pixel_distance_correlations/tmp.txt'
+  filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
 
-  # df = pd.DataFrame()
-
-  # df = load_df_using_clustergrammer(filename)
-
-  # # tmp = squareform(dm_1)
-  # tmp = dm_1
-  # inst_df = pd.DataFrame(data=tmp)
-  # inst_df.to_csv('processed_MNIST/pixel_distance_correlations/tmp.txt', sep='\t', index=False)
-
-  df = pd.read_csv(filename, sep='\t')
-
+  df = load_df_using_clustergrammer(filename)
+  print('shape of full MNIST data')
   print(df.shape)
 
+  # calculate distance matrix of full MNIST dataset
+  #####################################################
+  mat = df.as_matrix()
+  inst_dm = pdist(mat, metric='euclidean')
+
+  filename = 'processed_MNIST/pixel_distance_correlations/tmp.txt'
+
+  print('\nshape of calculated distance matrix')
+  print(inst_dm.shape)
+
+  # save distance matrix
+  ###########################
+  inst_df = pd.DataFrame(data=inst_dm)
+  inst_df.to_csv(filename, sep='\t', index=False)
+
+  # read tsv to check size
+  ##########################
+  read_df = pd.read_csv(filename, sep='\t')
+
+  print('\nsize of distance matrix read from file')
+  print(read_df.shape)
 
 def compare_subsamples():
   from scipy.stats import pearsonr
