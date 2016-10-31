@@ -1,10 +1,17 @@
 def main():
 
+  calc_pixel_dist_full_MNIST()
+  df =  load_pixel_dist_full_MNIST()
+
   # compare_subsamples()
 
-  calc_pixel_dist_full_MNIST()
+
 
 def calc_pixel_dist_full_MNIST():
+  '''
+  Calculate the pixel-pixel distance matrix using the full MNIST datset. Use
+  this to compare to subsampled and downsampled datasets.
+  '''
   import pandas as pd
   from scipy.spatial.distance import pdist
 
@@ -30,12 +37,19 @@ def calc_pixel_dist_full_MNIST():
   inst_df = pd.DataFrame(data=inst_dm)
   inst_df.to_csv(filename, sep='\t', index=False)
 
+def load_pixel_dist_full_MNIST():
+  import pandas as pd
+
+  filename = 'processed_MNIST/pixel_distance_correlations/pixel-pixel_full_MNIST_dist-mat_eucl.txt'
+
   # read tsv to check size
   ##########################
   read_df = pd.read_csv(filename, sep='\t')
 
   print('\nsize of distance matrix read from file')
   print(read_df.shape)
+
+  return read_df
 
 def compare_subsamples():
   from scipy.stats import pearsonr
