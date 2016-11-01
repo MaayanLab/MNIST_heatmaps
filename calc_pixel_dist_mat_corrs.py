@@ -1,5 +1,7 @@
 def main():
 
+  # # only run once
+  # #################
   # calc_pixel_dist_full_MNIST()
 
   compare_subsamples_to_full()
@@ -26,7 +28,6 @@ def compare_subsamples_to_full():
 
     pr_results = pearsonr(dm_full, dm_sub)
     print(pr_results)
-
 
 
 def calc_pixel_dist_full_MNIST():
