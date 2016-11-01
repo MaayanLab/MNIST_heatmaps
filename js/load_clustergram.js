@@ -42,7 +42,8 @@ function show_number(inst_number){
     .append('img')
     .attr('src', function(){
 
-      console.log(inst_number)
+      console.log('showing two numbers')
+
 
       var inst_digit = String(inst_number.split('-')[0]);
       // var inst_number = String(inst_number);

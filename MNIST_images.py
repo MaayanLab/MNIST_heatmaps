@@ -1,5 +1,6 @@
 def main():
 
+
   save_images_from_all_subsets()
 
 def save_images_from_all_subsets():
@@ -58,6 +59,7 @@ def save_images_of_each_number_in_df(df, save_to):
                inst_name + '.png'
 
     plt.savefig(img_name, bbox_inches='tight', dpi=3)
+    plt.cla()
 
 def load_df_using_clustergrammer(filename):
   from copy import deepcopy
