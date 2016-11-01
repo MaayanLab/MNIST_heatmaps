@@ -22,8 +22,13 @@ def main():
   # invert image
   inst_pixels = 255 - inst_pixels
 
+  # # show figure
   plt.imshow(inst_pixels, cmap='gray')
-  plt.show()
+
+  # plt.plot(inst_pixels)
+  # plt.show()
+  plt.axis('off')
+  plt.savefig('tmp.png', bbox_inches='tight')
 
 def load_df_using_clustergrammer(filename):
   from copy import deepcopy
