@@ -37,13 +37,55 @@ function make_clust(inst_network){
 
 }
 
-function show_number(inst_number){
-  d3.select('.col_tip')
+function show_two_numbers(inst_number){
+
+  image_container = d3.select('.col_tip')
+                      .append('div')
+                      .classed('MNIST_container', true)
+                      .style('margin-top', '10px')
+
+
+
+  image_container
+    .append('img')
+    .attr('src', function(){
+
+      var inst_digit = String('One');
+      // var inst_number = String(inst_number);
+      var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
+                          String('One-1') + '.png';
+      return inst_filename;
+    })
+    .style('width', '100px')
+    .style('display','block')
+    // .style('margin-top', '10px')
+    .style('float','left');
+
+  image_container
     .append('img')
     .attr('src', function(){
 
       console.log('showing two numbers')
 
+      var inst_digit = String(inst_number.split('-')[0]);
+      // var inst_number = String(inst_number);
+      var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
+                          String(inst_number) + '.png';
+      return inst_filename;
+    })
+    .style('width', '100px')
+    .style('display','block')
+    // .style('margin-top', '10px')
+    .style('margin-left', '110px')
+
+}
+
+function show_number(inst_number){
+  d3.select('.col_tip')
+    .append('img')
+    .attr('src', function(){
+
+      console.log(inst_number)
 
       var inst_digit = String(inst_number.split('-')[0]);
       // var inst_number = String(inst_number);

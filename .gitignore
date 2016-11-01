@@ -77,4 +77,3 @@ clustergrammer
 ######################
 processed_MNIST/large_files/*
 processed_MNIST/random_subsampling/*
-img/
