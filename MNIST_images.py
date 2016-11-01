@@ -20,12 +20,28 @@ def save_784_pixel_images():
   mat = np.zeros([mat_size, mat_size])
 
   # set inst_pixel value to 1
-  row_index = 0
-  col_index = 0
+  row_index = 10
+  col_index = 20
 
   mat[row_index, col_index] = 100
 
-  # mat = mat + 1
+  for cross in range(3):
+    # add surrounding image
+    for i in range(4):
+      new_row_index = row_index
+      new_col_index = col_index
+      if i == 0:
+        new_row_index = new_row_index + cross
+      if i == 1:
+        new_row_index = new_row_index -cross
+      if i == 2:
+        new_col_index = new_col_index + cross
+      if i == 3:
+        new_col_index = new_col_index -cross
+
+      if new_row_index > 0 and new_row_index < mat_size:
+        if new_col_index > 0 and new_col_index < mat_size:
+          mat[new_row_index, new_col_index] = 100
 
   print(mat.shape)
   print(mat.sum())
@@ -33,7 +49,8 @@ def save_784_pixel_images():
   # custom colormap
   from matplotlib.colors import LinearSegmentedColormap
   # pass rgba tuples, zero is transparents
-  cmap = LinearSegmentedColormap.from_list('mycmap', [(0, (0,0,0,0)), (1, 'blue')])
+  # cmap = LinearSegmentedColormap.from_list('mycmap', [(0, 'red'), (1, 'yellow')])
+  cmap = LinearSegmentedColormap.from_list('mycmap', [(0, (0,0,0,0)), (1, 'yellow')])
   # cmap = LinearSegmentedColormap.from_list('mycmap', [(0, 'white'), (1, 'blue')])
 
   # save image
@@ -43,7 +60,7 @@ def save_784_pixel_images():
 
   img_name = 'tmp.png'
 
-  plt.savefig(img_name, transparent=True)
+  plt.savefig(img_name, transparent=True, bbox_inches='tight', dpi=20)
   # plt.savefig(img_name)
   plt.cla()
 

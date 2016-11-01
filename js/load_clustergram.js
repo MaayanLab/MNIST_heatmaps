@@ -57,6 +57,7 @@ function show_number_and_pixel(inst_number){
       return inst_filename;
     })
     .style('width', '100px')
+    .style('height', '100px')
     .style('display','block')
     .style('float','left');
     // .style('margin-left', '10px')
@@ -71,8 +72,10 @@ function show_number_and_pixel(inst_number){
       return 'tmp.png';
     })
     .style('width', '100px')
+    .style('height', '100px')
     .style('opacity', 0)
     .transition()
+    .delay(100)
     .style('opacity', 1)
 
 }
