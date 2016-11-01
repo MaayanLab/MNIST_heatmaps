@@ -39,7 +39,7 @@ function make_clust(inst_network){
 
 function show_two_numbers(inst_number){
 
-  image_container = d3.select('.col_tip')
+  image_container = d3.selectAll('.col_tip')
                       .append('div')
                       .classed('MNIST_container', true)
                       .style('margin-top', '10px')
@@ -81,7 +81,7 @@ function show_two_numbers(inst_number){
 }
 
 function show_number(inst_number){
-  d3.select('.col_tip')
+  d3.selectAll('.col_tip')
     .append('img')
     .attr('src', function(){
 
