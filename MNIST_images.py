@@ -1,22 +1,47 @@
 def main():
 
+  # save_MNIST_images_from_all_subsets()
 
-  save_images_from_all_subsets()
+  save_784_pixel_images()
 
-def save_images_from_all_subsets():
+def save_784_pixel_images():
+
+  import numpy as np
+
+  filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
+  df = load_df_using_clustergrammer(filename)
+
+  rows = df.index.tolist()
+  print(len(rows))
+  # print(rows)
+
+  mat_size = 28
+  mat = np.zeros([mat_size, mat_size])
+
+  # set inst_pixel value to 1
+  row_index = 0
+  col_index = 0
+
+  mat[row_index, col_index] = 1
+
+  print(mat.shape)
+  print(mat.sum())
+
+def save_MNIST_images_from_all_subsets():
+  '''
+  save image of each 'real' digit in each of the MNIST subset files
+  '''
+
   import glob
 
   all_files = glob.glob('processed_MNIST/random_subsampling/*.txt')
 
   for filename in all_files:
 
-    # filename = 'processed_MNIST/random_subsampling/MNIST_100x_random_subsample_0.txt'
-
     save_images_of_each_number_in_file(filename)
 
 def save_images_of_each_number_in_file(filename):
 
-  # filename = 'processed_MNIST/large_files/MNIST_row_labels.txt'
   df = load_df_using_clustergrammer(filename)
 
   save_to = 'MNIST_digits'
@@ -37,9 +62,6 @@ def save_images_of_each_number_in_df(df, save_to):
 
     # tuple labels
     inst_name = inst_col[0].split(': ')[1]
-
-    # # full mnist dataset has string names
-    # inst_name = inst_col
 
     inst_digit = inst_name.split('-')[0]
 
