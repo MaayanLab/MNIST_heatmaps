@@ -1,14 +1,12 @@
 def main():
 
-  filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
+  filename = 'processed_MNIST/random_subsampling/MNIST_100x_random_subsample_0.txt'
   df = load_df_using_clustergrammer(filename)
 
-  ds_df, mbk_labels = run_kmeans_mini_batch(df, 5, axis=1)
+  ds_df, mbk_labels = run_kmeans_mini_batch(df, 20, axis=1)
 
-  print('K-means\n----------------')
-
-  print(ds_df.shape)
-
+  # save
+  ds_df.to_csv('processed_MNIST/kmeans_downsample/tmp.txt', sep='\t')
 
 def run_kmeans_mini_batch(df, n_clusters, axis=0):
   from sklearn.cluster import MiniBatchKMeans
