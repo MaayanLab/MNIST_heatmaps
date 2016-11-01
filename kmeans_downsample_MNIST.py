@@ -7,7 +7,6 @@ def main():
 
   print('K-means\n----------------')
 
-  print(df.shape)
   print(ds_df.shape)
 
 
@@ -37,7 +36,9 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
   mbk_cluster_names, mbk_cluster_pop = np.unique(mbk_labels, return_counts=True)
 
   print('============================')
+  print('mbk cluster names')
   print(mbk_cluster_names)
+  print('mbk cluster populations')
   print(mbk_cluster_pop)
   print('============================')
   print(mbk_labels)
@@ -45,21 +46,32 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
   row_numbers = range(n_clusters)
   row_labels = [ 'cluster-' + str(i) for i in row_numbers]
 
-  # # add number of points in each cluster
-  # row_cats = []
-  # for i in range(n_clusters):
+  # add number of points in each cluster
+  cluster_cats = []
+  for i in range(n_clusters):
 
-  #   inst_name = 'cell-clusters: ' + row_labels[i]
-  #   inst_count =  'number of cells: '+ str(mbk_cluster_pop[i])
-  #   inst_tuple = ( inst_name, inst_count )
-  #   row_cats.append(inst_tuple)
+    inst_name = 'cell-clusters: ' + row_labels[i]
+    inst_count =  'number of cells: '+ str(mbk_cluster_pop[i])
+    inst_tuple = ( inst_name, inst_count )
+    cluster_cats.append(inst_tuple)
+
+  print('cluster cats')
+  print(len(cluster_cats))
+  print(cluster_cats)
 
   ds = mbk_clusters
 
-  cols = df.columns.tolist()
+  if axis == 0:
+    cols = df.columns.tolist()
+  else:
+    cols = df.index.tolist()
 
-  # ds_df = pd.DataFrame(data=ds, columns = cols, index=row_cats)
-  ds_df = pd.DataFrame(data=ds)
+
+  # ds_df = pd.DataFrame(data=ds, columns = cols, index=cluster_cats)
+
+  # ds_df is always downsampling the rows, if the use wanted to downsample the
+  # columns, the df will be switched back later
+  ds_df = pd.DataFrame(data=ds, index=cluster_cats, columns=cols)
 
   # swap back for downsampled columns
   if axis == 1:
