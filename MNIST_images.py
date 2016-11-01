@@ -22,11 +22,8 @@ def main():
   # invert image
   inst_pixels = 255 - inst_pixels
 
-  # # show figure
+  # save image
   plt.imshow(inst_pixels, cmap='gray')
-
-  # plt.plot(inst_pixels)
-  # plt.show()
   plt.axis('off')
   plt.savefig('tmp.png', bbox_inches='tight')
 
