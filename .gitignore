@@ -76,4 +76,6 @@ clustergrammer
 # ignore large files
 ######################
 processed_MNIST/large_files/*
-processed_MNIST/random_subsampling/*
+
+# add random subsamples since directory is ~20MB
+#processed_MNIST/random_subsampling/*
