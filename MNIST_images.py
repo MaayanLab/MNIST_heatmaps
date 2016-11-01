@@ -1,7 +1,21 @@
 def main():
 
+  save_images_from_all_subsets()
 
-  filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
+def save_images_from_all_subsets():
+  import glob
+
+  all_files = glob.glob('processed_MNIST/random_subsampling/*.txt')
+
+  for filename in all_files:
+
+    # filename = 'processed_MNIST/random_subsampling/MNIST_100x_random_subsample_0.txt'
+
+    save_images_of_each_number_in_file(filename)
+
+def save_images_of_each_number_in_file(filename):
+
+  # filename = 'processed_MNIST/large_files/MNIST_row_labels.txt'
   df = load_df_using_clustergrammer(filename)
 
   save_to = 'MNIST_digits'
@@ -19,7 +33,13 @@ def save_images_of_each_number_in_df(df, save_to):
   cols = df.columns.tolist()
 
   for inst_col in cols:
+
+    # tuple labels
     inst_name = inst_col[0].split(': ')[1]
+
+    # # full mnist dataset has string names
+    # inst_name = inst_col
+
     inst_digit = inst_name.split('-')[0]
 
     print('save: '+inst_name)
@@ -37,7 +57,7 @@ def save_images_of_each_number_in_df(df, save_to):
     img_name = 'img/' + save_to + '/' + str(inst_digit) + '/' + \
                inst_name + '.png'
 
-    plt.savefig(img_name, bbox_inches='tight')
+    plt.savefig(img_name, bbox_inches='tight', dpi=3)
 
 def load_df_using_clustergrammer(filename):
   from copy import deepcopy
