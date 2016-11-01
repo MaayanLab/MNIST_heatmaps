@@ -1,6 +1,5 @@
 def main():
 
-
   filename = 'processed_MNIST/random_subsampling/MNIST_100x_random_subsample_0.txt'
   df = load_df_using_clustergrammer(filename)
 

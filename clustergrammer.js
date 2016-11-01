@@ -535,6 +535,7 @@ var Clustergrammer =
 	    max_allow_fs: 20,
 	    dendro_filter: { 'row': false, 'col': false },
 	    row_tip_callback: null,
+	    col_tip_callback: null,
 	    new_cat_data: null
 	  };
 
@@ -4834,7 +4835,7 @@ var Clustergrammer =
 	  if (params.labels.show_label_tooltips) {
 
 	    // d3-tooltip
-	    var col_tip = d3_tip_custom().attr('class', 'd3-tip').direction('w').offset([20, 0]).style('display', 'block').html(function (d) {
+	    var col_tip = d3_tip_custom().attr('class', 'd3-tip col_tip').direction('w').offset([20, 0]).style('display', 'block').html(function (d) {
 	      var inst_name = d.name.replace(/_/g, ' ').split('#')[0];
 	      return "<span>" + inst_name + "</span>";
 	    });
@@ -4845,7 +4846,12 @@ var Clustergrammer =
 	    // .selectAll('.col_label_text')
 	    .selectAll('.col_label_group')
 	    // .selectAll('text')
-	    .on('mouseover', col_tip.show).on('mouseout', function () {
+	    .on('mouseover', function (d) {
+	      col_tip.show(d);
+	      if (params.col_tip_callback != null) {
+	        params.col_tip_callback(d.name);
+	      }
+	    }).on('mouseout', function () {
 	      col_tip.hide(this);
 	    });
 	  }

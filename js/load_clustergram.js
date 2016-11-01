@@ -13,7 +13,7 @@ function make_clust(inst_network){
         root: '#container-id-1',
         'network_data': network_data,
         'about':'Zoom, scroll, and click buttons to interact with the clustergram.',
-        // 'row_tip_callback':gene_info,
+        'col_tip_callback':show_number,
         'sidebar_width':150
       };
 
@@ -35,6 +35,15 @@ function make_clust(inst_network){
 
   });
 
+}
+
+function show_number(inst_number){
+  d3.select('.col_tip')
+    .append('img')
+    .attr('src', 'tmp.png')
+    .style('width', '100px')
+    .style('display','block')
+    .style('margin-top', '10px');
 }
 
 function resize_container(args){
