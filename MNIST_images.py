@@ -1,7 +1,16 @@
 def main():
 
-  filename = 'processed_MNIST/random_subsampling/MNIST_100x_random_subsample_0.txt'
+
+  filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
   df = load_df_using_clustergrammer(filename)
+
+  save_to = 'MNIST_digits'
+  save_images_of_each_number_in_df(df, save_to)
+
+def save_images_of_each_number_in_df(df, save_to):
+  '''
+  save image of each column digit to img subdirectory 'save_to'
+  '''
 
   import matplotlib.pyplot as plt
   import numpy as np
@@ -9,22 +18,26 @@ def main():
   print(df.shape)
   cols = df.columns.tolist()
 
-  inst_pixels = df[cols[77]].values
+  for inst_col in cols:
+    inst_name = inst_col[0].split(': ')[1]
+    inst_digit = inst_name.split('-')[0]
 
-  print(inst_pixels.shape)
-  inst_pixels = inst_pixels.reshape((28,28))
-  print(inst_pixels.shape)
+    print('save: '+inst_name)
 
-  max_val = np.amax(inst_pixels)
-  print('max val: '+str(max_val))
+    inst_pixels = df[inst_col].values
+    inst_pixels = inst_pixels.reshape((28,28))
 
-  # invert image
-  inst_pixels = 255 - inst_pixels
+    # invert image
+    inst_pixels = 255 - inst_pixels
 
-  # save image
-  plt.imshow(inst_pixels, cmap='gray')
-  plt.axis('off')
-  plt.savefig('tmp.png', bbox_inches='tight')
+    # save image
+    plt.imshow(inst_pixels, cmap='gray')
+    plt.axis('off')
+
+    img_name = 'img/' + save_to + '/' + str(inst_digit) + '/' + \
+               inst_name + '.png'
+
+    plt.savefig(img_name, bbox_inches='tight')
 
 def load_df_using_clustergrammer(filename):
   from copy import deepcopy

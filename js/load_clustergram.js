@@ -40,7 +40,16 @@ function make_clust(inst_network){
 function show_number(inst_number){
   d3.select('.col_tip')
     .append('img')
-    .attr('src', 'tmp.png')
+    .attr('src', function(){
+
+      console.log(inst_number)
+
+      var inst_digit = String(inst_number.split('-')[0]);
+      // var inst_number = String(inst_number);
+      var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
+                          String(inst_number) + '.png';
+      return inst_filename;
+    })
     .style('width', '100px')
     .style('display','block')
     .style('margin-top', '10px');
