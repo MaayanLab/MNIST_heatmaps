@@ -91,6 +91,8 @@ function show_number(inst_number){
       // var inst_number = String(inst_number);
       var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
                           String(inst_number) + '.png';
+
+      inst_filename = 'tmp.png'
       return inst_filename;
     })
     .style('width', '100px')

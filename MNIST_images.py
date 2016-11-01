@@ -7,6 +7,7 @@ def main():
 def save_784_pixel_images():
 
   import numpy as np
+  import matplotlib.pyplot as plt
 
   filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
   df = load_df_using_clustergrammer(filename)
@@ -22,10 +23,26 @@ def save_784_pixel_images():
   row_index = 0
   col_index = 0
 
-  mat[row_index, col_index] = 1
+  mat[row_index, col_index] = 100
+
+  # mat = mat + 1
 
   print(mat.shape)
   print(mat.sum())
+
+  # custom colormap
+  from matplotlib.colors import LinearSegmentedColormap
+  cmap = LinearSegmentedColormap.from_list('mycmap', [(0, 'white'), (1, 'blue')])
+
+  # save image
+  plt.imshow(mat, cmap=cmap)
+  plt.axis('off')
+  plt.show()
+
+  # img_name = 'tmp.png'
+
+  # plt.savefig(img_name, transparent=True, interpolation='none')
+  # plt.cla()
 
 def save_MNIST_images_from_all_subsets():
   '''
