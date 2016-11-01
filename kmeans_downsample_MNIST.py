@@ -1,9 +1,10 @@
 def main():
 
-  filename = 'processed_MNIST/random_subsampling/MNIST_100x_random_subsample_0.txt'
+  filename = 'processed_MNIST/large_files/MNIST_row_labels.txt'
+  # filename = 'processed_MNIST/random_subsampling/MNIST_1000x_random_subsample_0.txt'
   df = load_df_using_clustergrammer(filename)
 
-  ds_df, mbk_labels = run_kmeans_mini_batch(df, 20, axis=1)
+  ds_df, mbk_labels = run_kmeans_mini_batch(df, 100, axis=1)
 
   # save
   ds_df.to_csv('processed_MNIST/kmeans_downsample/tmp.txt', sep='\t')
