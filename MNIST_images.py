@@ -32,17 +32,20 @@ def save_784_pixel_images():
 
   # custom colormap
   from matplotlib.colors import LinearSegmentedColormap
-  cmap = LinearSegmentedColormap.from_list('mycmap', [(0, 'white'), (1, 'blue')])
+  # pass rgba tuples, zero is transparents
+  cmap = LinearSegmentedColormap.from_list('mycmap', [(0, (0,0,0,0)), (1, 'blue')])
+  # cmap = LinearSegmentedColormap.from_list('mycmap', [(0, 'white'), (1, 'blue')])
 
   # save image
   plt.imshow(mat, cmap=cmap)
   plt.axis('off')
-  plt.show()
+  # plt.show()
 
-  # img_name = 'tmp.png'
+  img_name = 'tmp.png'
 
-  # plt.savefig(img_name, transparent=True, interpolation='none')
-  # plt.cla()
+  plt.savefig(img_name, transparent=True)
+  # plt.savefig(img_name)
+  plt.cla()
 
 def save_MNIST_images_from_all_subsets():
   '''

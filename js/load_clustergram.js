@@ -13,7 +13,7 @@ function make_clust(inst_network){
         root: '#container-id-1',
         'network_data': network_data,
         'about':'Zoom, scroll, and click buttons to interact with the clustergram.',
-        'col_tip_callback':show_number,
+        'col_tip_callback':show_number_and_pixel,
         'sidebar_width':150
       };
 
@@ -37,6 +37,46 @@ function make_clust(inst_network){
 
 }
 
+function show_number_and_pixel(inst_number){
+
+  image_container = d3.selectAll('.col_tip')
+                      .append('div')
+                      .classed('MNIST_container', true)
+                      .style('margin-top', '10px')
+
+
+  image_container
+    .append('img')
+    .attr('src', function(){
+
+      console.log('showing two numbers')
+
+      var inst_digit = String(inst_number.split('-')[0]);
+      var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
+                          String(inst_number) + '.png';
+      return inst_filename;
+    })
+    .style('width', '100px')
+    .style('display','block')
+    .style('float','left');
+    // .style('margin-left', '10px')
+    // .style('opacity',0.1)
+
+  image_container
+    .append('img')
+    .style('margin-left', '-100px')
+    .attr('src', function(){
+
+
+      return 'tmp.png';
+    })
+    .style('width', '100px')
+    .style('opacity', 0)
+    .transition()
+    .style('opacity', 1)
+
+}
+
 function show_two_numbers(inst_number){
 
   image_container = d3.selectAll('.col_tip')
@@ -51,14 +91,12 @@ function show_two_numbers(inst_number){
     .attr('src', function(){
 
       var inst_digit = String('One');
-      // var inst_number = String(inst_number);
       var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
                           String('One-1') + '.png';
       return inst_filename;
     })
     .style('width', '100px')
     .style('display','block')
-    // .style('margin-top', '10px')
     .style('float','left');
 
   image_container
@@ -68,14 +106,12 @@ function show_two_numbers(inst_number){
       console.log('showing two numbers')
 
       var inst_digit = String(inst_number.split('-')[0]);
-      // var inst_number = String(inst_number);
       var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
                           String(inst_number) + '.png';
       return inst_filename;
     })
     .style('width', '100px')
     .style('display','block')
-    // .style('margin-top', '10px')
     .style('margin-left', '110px')
 
 }
@@ -92,7 +128,6 @@ function show_number(inst_number){
       var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
                           String(inst_number) + '.png';
 
-      inst_filename = 'tmp.png'
       return inst_filename;
     })
     .style('width', '100px')
