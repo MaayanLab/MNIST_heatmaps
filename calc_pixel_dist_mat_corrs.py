@@ -2,44 +2,29 @@ def main():
 
   # calc_pixel_dist_full_MNIST()
 
+  compare_subsamples_to_full()
 
-  compare_subsamples()
-
-
-def compare_subsamples():
+def compare_subsamples_to_full():
   from scipy.stats import pearsonr
   import pandas as pd
 
   import numpy as np
   from scipy.spatial.distance import pdist, squareform
 
-
+  # making full distance matrix the same shape as the compared matrix
   df_full =  load_pixel_dist_full_MNIST()
   dm_full = df_full.as_matrix()
   dm_full = dm_full[:,0]
 
   sample_size = 20
 
-  for sample_num_2 in range(4):
-    # sample_num_1 = 0
-
-    # inst_file = 'MNIST_'+str(sample_size)+'x_random_subsample_'+ \
-    #              str(sample_num_1)+'.txt'
-
-    # dm_1 = get_dist_mat_from_file(inst_file)
-    print('here')
+  for sample_num_2 in range(5):
 
     inst_file = 'MNIST_'+str(sample_size)+'x_random_subsample_'+ \
                  str(sample_num_2)+'.txt'
-    dm_2 = get_dist_mat_from_file(inst_file)
+    dm_sub = get_dist_mat_from_file(inst_file)
 
-    print(type(dm_2))
-    print(type(dm_full))
-
-    print(dm_full.shape)
-    print(dm_2.shape)
-
-    pr_results = pearsonr(dm_full, dm_2)
+    pr_results = pearsonr(dm_full, dm_sub)
     print(pr_results)
 
 
@@ -95,6 +80,8 @@ def get_dist_mat_from_file(inst_file):
   filename = 'processed_MNIST/random_subsampling/'+inst_file
 
   df = load_df_using_clustergrammer(filename)
+
+  cols = df.columns.tolist()
 
   mat = df.as_matrix()
 
