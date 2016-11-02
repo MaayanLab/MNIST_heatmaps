@@ -2,7 +2,9 @@ def main():
 
   # save_MNIST_images_from_all_subsets()
 
-  save_784_pixel_images()
+  save_MNIST_images_from_equal_subsamples()
+
+  # save_784_pixel_images()
 
 def save_784_pixel_images():
 
@@ -64,6 +66,18 @@ def save_784_pixel_images():
   # plt.savefig(img_name)
   plt.cla()
 
+def save_MNIST_images_from_equal_subsamples():
+  '''
+  save images of each 'real' digit in each of the MNIST equal subset files
+  '''
+
+  import glob
+
+  all_files = glob.glob('processed_MNIST/equal_digit_sampling/*.txt')
+
+  for filename in all_files:
+    save_images_of_each_number_in_file(filename)
+
 def save_MNIST_images_from_all_subsets():
   '''
   save image of each 'real' digit in each of the MNIST subset files
@@ -97,8 +111,13 @@ def save_images_of_each_number_in_df(df, save_to):
 
   for inst_col in cols:
 
-    # tuple labels
-    inst_name = inst_col[0].split(': ')[1]
+    if type(inst_col) is tuple:
+      # tuple labels
+      inst_name = inst_col[0].split(': ')[1]
+    else:
+      # normal labels
+      inst_name = inst_col
+
 
     inst_digit = inst_name.split('-')[0]
 
