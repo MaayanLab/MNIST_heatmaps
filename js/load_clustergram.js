@@ -30,11 +30,6 @@ function make_clust(inst_network){
 
       d3.select(cgm.params.root + ' .wait_message').remove();
 
-      // // Enrichr categories
-      // //////////////////////
-      // enr_obj = Enrichr_request(cgm);
-      // enr_obj.enrichr_icon();
-
   });
 
 }
@@ -97,7 +92,6 @@ function show_number_and_pixel(tile_info){
     .style('opacity', 1)
 
 }
-
 
 
 function show_number(inst_column){
