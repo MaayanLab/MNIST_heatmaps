@@ -26,7 +26,7 @@ net.filter_N_top('row', 500, rank_type='sum')
 # net.swap_nan_for_zero()
 
 net.make_clust(dist_type='cos',views=['N_row_sum', 'N_row_var'] , dendro=True,
-               sim_mat=True, filter_sim=0.6, calc_cat_pval=False)
+               sim_mat=True, filter_sim=0.7, calc_cat_pval=False)
 
 # write jsons for front-end visualizations
 net.write_json_to_file('viz', 'json/mult_view.json', 'indent')
