@@ -67,10 +67,14 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
     clust_names = col_array[found_indices]
 
     for inst_name in clust_names:
-      if type(inst_name) is tuple:
-        inst_digit = inst_name[0].split(': ')[1].split('-')[0]
-      else:
-        inst_digit = inst_name.split('-')[0]
+
+      # simple format
+      #######################################
+      inst_digit = inst_name.split('-')[0]
+
+      # # complex format
+      # ####################################################
+      # inst_digit = inst_name[0].split(': ')[1].split('-')[0]
 
       tmp_index = digit_types.index(inst_digit)
 
@@ -99,13 +103,34 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
     inst_count =  'number in clust: '+ str(mbk_cluster_pop[i])
     inst_tuple = ( inst_name, inst_count )
 
-    for tmp_index in range(len(digit_types)):
+    # add category to majority digit in cluster
+    ##############################################
+    cat_values = digit_cats[i]
 
-      tmp_digit = digit_types[tmp_index]
-      tmp_fraction = digit_cats[i][tmp_index]
+    max_cat_fraction = cat_values.max()
+    max_cat_index = np.where(cat_values == max_cat_fraction)[0][0]
+    max_cat_name = digit_types[max_cat_index]
 
-      fraction_string = str(tmp_digit) + ': ' + str(tmp_fraction)
-      inst_tuple = inst_tuple + (fraction_string,)
+    print(digit_types[max_cat_index])
+
+    # add cat string
+    cat_name_string = 'Majority Digit: ' + max_cat_name
+    inst_tuple = inst_tuple + (cat_name_string,)
+
+    # add cat fraction
+    max_cat_fraction = np.round(max_cat_fraction, decimals=2) * 100
+    fraction_string = 'Digit Pct: ' + str(max_cat_fraction)
+    inst_tuple = inst_tuple + (fraction_string,)
+
+    # add value categories for each number
+    ########################################
+    # for tmp_index in range(len(digit_types)):
+
+    #   tmp_digit = digit_types[tmp_index]
+    #   tmp_fraction = cat_values[tmp_index]
+
+    #   fraction_string = str(tmp_digit) + ': ' + str(tmp_fraction)
+    #   inst_tuple = inst_tuple + (fraction_string,)
 
     cluster_cats.append(inst_tuple)
 
