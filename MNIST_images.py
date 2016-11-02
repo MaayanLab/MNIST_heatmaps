@@ -2,9 +2,9 @@ def main():
 
   # save_MNIST_images_from_all_subsets()
 
-  save_MNIST_images_from_equal_subsamples()
+  # save_MNIST_images_from_equal_subsamples()
 
-  # save_784_pixel_images()
+  save_784_pixel_images()
 
 def save_784_pixel_images():
 
@@ -19,52 +19,49 @@ def save_784_pixel_images():
   # print(rows)
 
   mat_size = 28
-  mat = np.zeros([mat_size, mat_size])
 
-  # set inst_pixel value to 1
-  row_index = 10
-  col_index = 20
+  for row_index in range(28):
+    for col_index in range(28):
 
-  mat[row_index, col_index] = 100
+      mat = np.zeros([mat_size, mat_size])
 
-  for cross in range(3):
-    # add surrounding image
-    for i in range(4):
-      new_row_index = row_index
-      new_col_index = col_index
-      if i == 0:
-        new_row_index = new_row_index + cross
-      if i == 1:
-        new_row_index = new_row_index -cross
-      if i == 2:
-        new_col_index = new_col_index + cross
-      if i == 3:
-        new_col_index = new_col_index -cross
+      mat[row_index, col_index] = 100
 
-      if new_row_index > 0 and new_row_index < mat_size:
-        if new_col_index > 0 and new_col_index < mat_size:
-          mat[new_row_index, new_col_index] = 100
+      for cross in range(3):
+        # add surrounding image
+        for i in range(4):
+          new_row_index = row_index
+          new_col_index = col_index
+          if i == 0:
+            new_row_index = new_row_index + cross
+          if i == 1:
+            new_row_index = new_row_index -cross
+          if i == 2:
+            new_col_index = new_col_index + cross
+          if i == 3:
+            new_col_index = new_col_index -cross
 
-  print(mat.shape)
-  print(mat.sum())
+          if new_row_index > 0 and new_row_index < mat_size:
+            if new_col_index > 0 and new_col_index < mat_size:
+              mat[new_row_index, new_col_index] = 100
 
-  # custom colormap
-  from matplotlib.colors import LinearSegmentedColormap
-  # pass rgba tuples, zero is transparents
-  # cmap = LinearSegmentedColormap.from_list('mycmap', [(0, 'red'), (1, 'yellow')])
-  cmap = LinearSegmentedColormap.from_list('mycmap', [(0, (0,0,0,0)), (1, 'yellow')])
-  # cmap = LinearSegmentedColormap.from_list('mycmap', [(0, 'white'), (1, 'blue')])
+      # custom colormap
+      from matplotlib.colors import LinearSegmentedColormap
+      # pass rgba tuples, zero is transparents
+      cmap = LinearSegmentedColormap.from_list('mycmap', [(0, (0,0,0,0)), (1, 'yellow')])
 
-  # save image
-  plt.imshow(mat, cmap=cmap)
-  plt.axis('off')
-  # plt.show()
+      # save image
+      plt.imshow(mat, cmap=cmap)
+      plt.axis('off')
+      # not show image
+      # plt.show()
 
-  img_name = 'tmp.png'
+      img_name = 'img/pixel_images/pos_' + str(row_index) + '-' + \
+                  str(col_index) + '.png'
+      print(img_name)
 
-  plt.savefig(img_name, transparent=True, bbox_inches='tight', dpi=20)
-  # plt.savefig(img_name)
-  plt.cla()
+      plt.savefig(img_name, transparent=True, bbox_inches='tight', dpi=20)
+      plt.cla()
 
 def save_MNIST_images_from_equal_subsamples():
   '''
