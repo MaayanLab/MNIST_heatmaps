@@ -40,7 +40,16 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
   print('mbk cluster populations')
   print(mbk_cluster_pop)
   print('============================')
-  print(mbk_labels)
+
+  print('mbk_labels')
+  print(len(mbk_labels))
+  # print(mbk_labels)
+
+  # make a dictionary with cluster keys
+  # each value in the dictionary will be an array with 10 digits that gives
+  # the fraction of digits in the cluster that fall into each digit category
+  digit_cats = {}
+
 
   row_numbers = range(n_clusters)
   row_labels = [ 'cluster-' + str(i) for i in row_numbers]
@@ -53,10 +62,6 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
     inst_count =  'number of cells: '+ str(mbk_cluster_pop[i])
     inst_tuple = ( inst_name, inst_count )
     cluster_cats.append(inst_tuple)
-
-  print('cluster cats')
-  print(len(cluster_cats))
-  print(cluster_cats)
 
   ds = mbk_clusters
 
