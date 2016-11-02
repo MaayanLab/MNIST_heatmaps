@@ -94,7 +94,9 @@ function show_number_and_pixel(tile_info){
 }
 
 
-function show_number(inst_column){
+function show_number(col_data){
+  var inst_column =  col_data.name;
+
   d3.selectAll('.col_tip')
     .append('img')
     .attr('src', function(){
@@ -106,6 +108,22 @@ function show_number(inst_column){
     .style('width', '100px')
     .style('display','block')
     .style('margin-top', '10px');
+
+  d3.selectAll('.col_tip')
+    .append('p')
+    .text(col_data['cat-0'])
+    .style('margin-top','5px');
+
+  d3.selectAll('.col_tip')
+    .append('p')
+    .text(col_data['cat-1'])
+    .style('margin-top','5px');
+
+  d3.selectAll('.col_tip')
+    .append('p')
+    .text(col_data['cat-2'])
+    .style('margin-top','5px');
+
 }
 
 function show_pixel(inst_pixel){
