@@ -1,7 +1,7 @@
 def main():
 
-  filename = 'processed_MNIST/large_files/MNIST_row_labels.txt'
-  # filename = 'processed_MNIST/random_subsampling/MNIST_1000x_random_subsample_0.txt'
+  # filename = 'processed_MNIST/large_files/MNIST_row_labels.txt'
+  filename = 'processed_MNIST/random_subsampling/MNIST_1000x_random_subsample_0.txt'
   df = load_df_using_clustergrammer(filename)
 
   ds_df, mbk_labels = run_kmeans_mini_batch(df, 100, axis=1)
@@ -21,7 +21,7 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
     X = df.transpose()
   # kmeans is run with rows as data-points and columns as dimensions
   mbk = MiniBatchKMeans(init='k-means++', n_clusters=n_clusters,
-                        max_no_improvement=10, verbose=0)
+                        max_no_improvement=10, verbose=0, random_state=1000)
 
   # need to loop through each label (each k-means cluster) and count how many
   # points were given this label. This will give the population size of each label
