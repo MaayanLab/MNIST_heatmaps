@@ -100,8 +100,8 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
   for i in range(n_clusters):
 
     inst_name = 'cell-clusters: ' + row_labels[i]
-    inst_count =  'number in clust: '+ str(mbk_cluster_pop[i])
-    inst_tuple = ( inst_name, inst_count )
+    num_in_clust_string =  'number in clust: '+ str(mbk_cluster_pop[i])
+    inst_tuple = ( inst_name, num_in_clust_string )
 
     # add category to majority digit in cluster
     ##############################################
@@ -151,6 +151,32 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
   # swap back for downsampled columns
   if axis == 1:
     ds_df = ds_df.transpose()
+
+  # add center value-cat to pixels
+  old_rows = ds_df.index.tolist()
+
+  new_rows = []
+
+  max_radius = np.sqrt( np.square(28) + np.square(28) )
+
+  for inst_row in old_rows:
+
+    # make name
+    inst_name = 'Pixels: '+ inst_row
+
+    # make radius category
+    pos = inst_row.split('pos_')[1]
+    inst_x = int(pos.split('-')[0])
+    inst_y = int(pos.split('-')[1])
+    inst_radius = max_radius - np.sqrt( np.square(inst_x) + np.square(inst_y) )
+    inst_cat = 'Center: '+ str(inst_radius)
+
+    inst_tuple = ( inst_name, inst_cat )
+
+    new_rows.append(inst_tuple)
+
+  ds_df.index = new_rows
+
 
   return ds_df, mbk_labels
 
