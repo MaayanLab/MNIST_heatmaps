@@ -42,13 +42,45 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
   print('============================')
 
   print('mbk_labels')
-  print(len(mbk_labels))
+  print(mbk_labels)
   # print(mbk_labels)
 
   # make a dictionary with cluster keys
   # each value in the dictionary will be an array with 10 digits that gives
   # the fraction of digits in the cluster that fall into each digit category
   digit_cats = {}
+  digit_types = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', \
+                 'Seven', 'Eight', 'Nine']
+
+  # initialize digit_cats dictionary
+  for inst_type in range(n_clusters):
+    digit_cats[inst_type] = np.zeros([10])
+
+  col_array = np.asarray(df.columns.tolist())
+
+  print('\n\ncol_array')
+  print(len(col_array))
+  print('\n\n')
+
+  # populate the dictionary
+  for inst_clust in range(n_clusters):
+
+    # get the indices of all digits that fall in cluster
+    found = np.where(mbk_labels == inst_clust)
+
+    found_indices = found[0]
+
+    check = mbk_labels[found_indices]
+
+    print(check)
+
+    # print(found_indices)
+
+    print( str(inst_clust) + ': ' + str(len(found_indices)) )
+
+    clust_names = col_array[found_indices]
+
+    print(clust_names)
 
 
   row_numbers = range(n_clusters)
@@ -59,7 +91,7 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
   for i in range(n_clusters):
 
     inst_name = 'cell-clusters: ' + row_labels[i]
-    inst_count =  'number of cells: '+ str(mbk_cluster_pop[i])
+    inst_count =  'number in clust: '+ str(mbk_cluster_pop[i])
     inst_tuple = ( inst_name, inst_count )
     cluster_cats.append(inst_tuple)
 
