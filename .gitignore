@@ -79,3 +79,7 @@ processed_MNIST/large_files/*
 
 # add random subsamples since directory is ~20MB
 #processed_MNIST/random_subsampling/*
+
+img/MNIST_kmeans_clusters/*
+
+json/*

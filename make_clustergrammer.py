@@ -11,7 +11,8 @@ from clustergrammer import Network
 net = Network()
 
 # load matrix tsv file
-filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
+filename = 'processed_MNIST/kmeans_downsample/tmp.txt'
+# filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
 # filename = 'processed_MNIST/equal_digit_sampling/MNIST_20_digits_original.txt'
 net.load_file(filename)
 
