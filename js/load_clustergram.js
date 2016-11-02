@@ -39,10 +39,27 @@ function make_clust(inst_network){
 
 }
 
+function get_file_for_column(inst_column){
+  var inst_number = inst_column;
+
+  var col_type = inst_number.split('-')[0];
+
+  var inst_digit = String(inst_number.split('-')[0]);
+
+  if (col_type != 'cluster'){
+    var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
+                        String(inst_number) + '.png';
+  } else {
+    var inst_filename = 'img/MNIST_kmeans_clusters/tmp/'+
+                        String(inst_number) + '.png';
+  }
+
+  return inst_filename;
+}
 
 function show_number_and_pixel(tile_info){
 
-  var inst_number = tile_info.col_name;
+  var inst_column = tile_info.col_name;
   var inst_pixel = tile_info.row_name.replace(' ','_');
 
   image_container = d3.selectAll('.tile_tip')
@@ -54,10 +71,7 @@ function show_number_and_pixel(tile_info){
   image_container
     .append('img')
     .attr('src', function(){
-
-      var inst_digit = String(inst_number.split('-')[0]);
-      var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
-                          String(inst_number) + '.png';
+      var inst_filename = get_file_for_column(inst_column);
       return inst_filename;
     })
     .style('width', '100px')
@@ -84,54 +98,14 @@ function show_number_and_pixel(tile_info){
 
 }
 
-function show_two_numbers(inst_number){
-
-  image_container = d3.selectAll('.col_tip')
-                      .append('div')
-                      .classed('MNIST_container', true)
-                      .style('margin-top', '10px')
 
 
-
-  image_container
-    .append('img')
-    .attr('src', function(){
-
-      var inst_digit = String('One');
-      var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
-                          String('One-1') + '.png';
-      return inst_filename;
-    })
-    .style('width', '100px')
-    .style('display','block')
-    .style('float','left');
-
-  image_container
-    .append('img')
-    .attr('src', function(){
-
-      console.log('showing two numbers')
-
-      var inst_digit = String(inst_number.split('-')[0]);
-      var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
-                          String(inst_number) + '.png';
-      return inst_filename;
-    })
-    .style('width', '100px')
-    .style('display','block')
-    .style('margin-left', '110px')
-
-}
-
-function show_number(inst_number){
+function show_number(inst_column){
   d3.selectAll('.col_tip')
     .append('img')
     .attr('src', function(){
 
-      var inst_digit = String(inst_number.split('-')[0]);
-      // var inst_number = String(inst_number);
-      var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
-                          String(inst_number) + '.png';
+      var inst_filename = get_file_for_column(inst_column);
 
       return inst_filename;
     })
@@ -184,4 +158,44 @@ function resize_container(args){
   d3.select(args.root)
     .style('width', screen_width+'px')
     .style('height', screen_height+'px');
+}
+
+
+function show_two_numbers(inst_number){
+
+  image_container = d3.selectAll('.col_tip')
+                      .append('div')
+                      .classed('MNIST_container', true)
+                      .style('margin-top', '10px')
+
+
+
+  image_container
+    .append('img')
+    .attr('src', function(){
+
+      var inst_digit = String('One');
+      var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
+                          String('One-1') + '.png';
+      return inst_filename;
+    })
+    .style('width', '100px')
+    .style('display','block')
+    .style('float','left');
+
+  image_container
+    .append('img')
+    .attr('src', function(){
+
+      console.log('showing two numbers')
+
+      var inst_digit = String(inst_number.split('-')[0]);
+      var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
+                          String(inst_number) + '.png';
+      return inst_filename;
+    })
+    .style('width', '100px')
+    .style('display','block')
+    .style('margin-left', '110px')
+
 }

@@ -4,9 +4,11 @@ def main():
 
   # save_MNIST_images_from_equal_subsamples()
 
+  save_MNIST_images_from_kmeans_clusters()
+
   # save_784_pixel_images()
 
-  save_blank_background()
+  # save_blank_background()
 
 def save_784_pixel_images():
 
@@ -65,6 +67,12 @@ def save_784_pixel_images():
       plt.savefig(img_name, transparent=True, bbox_inches='tight', dpi=20)
       plt.cla()
 
+def save_MNIST_images_from_kmeans_clusters():
+
+  filename = 'processed_MNIST/kmeans_downsample/tmp.txt'
+  save_images_of_each_number_in_file(filename, save_to='MNIST_kmeans_clusters/tmp/',
+                                     save_subdirectory=False)
+
 def save_MNIST_images_from_equal_subsamples():
   '''
   save images of each 'real' digit in each of the MNIST equal subset files
@@ -90,14 +98,14 @@ def save_MNIST_images_from_all_subsets():
 
     save_images_of_each_number_in_file(filename)
 
-def save_images_of_each_number_in_file(filename):
+def save_images_of_each_number_in_file(filename, save_to='MNIST_digits', save_subdirectory=True):
 
   df = load_df_using_clustergrammer(filename)
 
-  save_to = 'MNIST_digits'
-  save_images_of_each_number_in_df(df, save_to)
 
-def save_images_of_each_number_in_df(df, save_to):
+  save_images_of_each_number_in_df(df, save_to, save_subdirectory)
+
+def save_images_of_each_number_in_df(df, save_to, save_subdirectory=True):
   '''
   save image of each column digit to img subdirectory 'save_to'
   '''
@@ -132,8 +140,11 @@ def save_images_of_each_number_in_df(df, save_to):
     plt.imshow(inst_pixels, cmap='gray')
     plt.axis('off')
 
-    img_name = 'img/' + save_to + '/' + str(inst_digit) + '/' + \
-               inst_name + '.png'
+    if save_subdirectory:
+      img_name = 'img/' + save_to + '/' + str(inst_digit) + '/' + \
+                 inst_name + '.png'
+    else:
+      img_name = 'img/' + save_to + '/' + inst_name + '.png'
 
     plt.savefig(img_name, bbox_inches='tight', dpi=3)
     plt.cla()
@@ -157,7 +168,6 @@ def save_blank_background():
   plt.imshow(mat, cmap=cmap)
   plt.axis('off')
   plt.savefig('img/pixel_images/background.png', bbox_inches='tight', dpi=3)
-
 
 def load_df_using_clustergrammer(filename):
   from copy import deepcopy
