@@ -99,7 +99,7 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
   cluster_cats = []
   for i in range(n_clusters):
 
-    inst_name = 'cell-clusters: ' + row_labels[i]
+    inst_name = 'MNIST-Clusters: ' + row_labels[i]
     num_in_clust_string =  'number in clust: '+ str(mbk_cluster_pop[i])
     inst_tuple = ( inst_name, num_in_clust_string )
 
