@@ -166,9 +166,9 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
 
     # make radius category
     pos = inst_row.split('pos_')[1]
-    inst_x = int(pos.split('-')[0])
-    inst_y = int(pos.split('-')[1])
-    inst_radius = max_radius - np.sqrt( np.square(inst_x) + np.square(inst_y) )
+    inst_x = int(pos.split('-')[0]) - 14
+    inst_y = int(pos.split('-')[1]) - 14
+    inst_radius = (max_radius/2 - np.sqrt( np.square(inst_x) + np.square(inst_y) ))/19.79
     inst_cat = 'Center: '+ str(inst_radius)
 
     inst_tuple = ( inst_name, inst_cat )
