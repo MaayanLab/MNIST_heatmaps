@@ -13,8 +13,8 @@ function make_clust(inst_network){
         root: '#container-id-1',
         'network_data': network_data,
         'about':'Zoom, scroll, and click buttons to interact with the clustergram.',
-        'col_tip_callback':show_number_and_pixel,
-        'tile_tip_callback':test_tile_callback,
+        'col_tip_callback':show_number,
+        'tile_tip_callback':show_number_and_pixel,
         'sidebar_width':150
       };
 
@@ -50,9 +50,14 @@ function test_tile_callback(tile_info){
 }
 
 
-function show_number_and_pixel(inst_number){
+function show_number_and_pixel(tile_info){
 
-  image_container = d3.selectAll('.col_tip')
+  var inst_number = tile_info.col_name;
+  var inst_pixel = tile_info.row_name.replace(' ','_');
+
+  console.log(inst_pixel)
+
+  image_container = d3.selectAll('.tile_tip')
                       .append('div')
                       .classed('MNIST_container', true)
                       .style('margin-top', '10px')
@@ -81,8 +86,9 @@ function show_number_and_pixel(inst_number){
     .style('margin-left', '-100px')
     .attr('src', function(){
 
-
-      return 'tmp.png';
+      pixel_image_name = 'img/pixel_images/' + inst_pixel + '.png'
+      console.log('pixel_image_name: '+pixel_image_name)
+      return pixel_image_name;
     })
     .style('width', '100px')
     .style('height', '100px')
