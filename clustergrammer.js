@@ -7808,8 +7808,9 @@ var Clustergrammer =
 
 	  var params = cgm.params;
 
+	  console.log('********** remove all tile tips');
 	  // remove old tooltips
-	  d3.selectAll(params.root + ' .d3-tip').style('opacity', 0);
+	  d3.selectAll(' .d3-tip').remove();
 
 	  // d3-tooltip - for tiles
 	  var tip = d3_tip_custom().attr('class', 'd3-tip tile_tip').direction('nw').offset([0, 0]).html(function (d) {

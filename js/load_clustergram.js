@@ -38,24 +38,11 @@ function make_clust(inst_network){
 
 }
 
-function test_tile_callback(tile_info){
-  console.log('\n\ntest_tile_callback')
-
-  var row_name = tile_info.row_name;
-  var col_name = tile_info.col_name;
-
-  console.log('row_name: ' + row_name)
-  console.log('col_name: ' + col_name)
-
-}
-
 
 function show_number_and_pixel(tile_info){
 
   var inst_number = tile_info.col_name;
   var inst_pixel = tile_info.row_name.replace(' ','_');
-
-  console.log(inst_pixel)
 
   image_container = d3.selectAll('.tile_tip')
                       .append('div')
@@ -66,8 +53,6 @@ function show_number_and_pixel(tile_info){
   image_container
     .append('img')
     .attr('src', function(){
-
-      console.log('showing two numbers')
 
       var inst_digit = String(inst_number.split('-')[0]);
       var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
@@ -87,7 +72,6 @@ function show_number_and_pixel(tile_info){
     .attr('src', function(){
 
       pixel_image_name = 'img/pixel_images/' + inst_pixel + '.png'
-      console.log('pixel_image_name: '+pixel_image_name)
       return pixel_image_name;
     })
     .style('width', '100px')
