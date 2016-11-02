@@ -4,7 +4,9 @@ def main():
 
   # save_MNIST_images_from_equal_subsamples()
 
-  save_784_pixel_images()
+  # save_784_pixel_images()
+
+  save_blank_background()
 
 def save_784_pixel_images():
 
@@ -135,6 +137,27 @@ def save_images_of_each_number_in_df(df, save_to):
 
     plt.savefig(img_name, bbox_inches='tight', dpi=3)
     plt.cla()
+
+def save_blank_background():
+  import matplotlib.pyplot as plt
+  import numpy as np
+
+  mat_size = 28
+
+  mat = np.zeros([mat_size, mat_size])
+
+  print(mat)
+
+  print(mat.shape)
+
+  from matplotlib.colors import LinearSegmentedColormap
+  # pass rgba tuples, zero is transparents
+  cmap = LinearSegmentedColormap.from_list('mycmap', [(0, (0,0,0,0)), (1, 'yellow')])
+
+  plt.imshow(mat, cmap=cmap)
+  plt.axis('off')
+  plt.savefig('img/pixel_images/background.png', bbox_inches='tight', dpi=3)
+
 
 def load_df_using_clustergrammer(filename):
   from copy import deepcopy

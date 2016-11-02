@@ -13,6 +13,7 @@ function make_clust(inst_network){
         root: '#container-id-1',
         'network_data': network_data,
         'about':'Zoom, scroll, and click buttons to interact with the clustergram.',
+        'row_tip_callback':show_pixel,
         'col_tip_callback':show_number,
         'tile_tip_callback':show_number_and_pixel,
         'sidebar_width':150
@@ -127,8 +128,6 @@ function show_number(inst_number){
     .append('img')
     .attr('src', function(){
 
-      console.log(inst_number)
-
       var inst_digit = String(inst_number.split('-')[0]);
       // var inst_number = String(inst_number);
       var inst_filename = 'img/MNIST_digits/'+inst_digit+'/'+
@@ -139,6 +138,42 @@ function show_number(inst_number){
     .style('width', '100px')
     .style('display','block')
     .style('margin-top', '10px');
+}
+
+function show_pixel(inst_pixel){
+
+  var inst_pixel = inst_pixel.replace(' ','_');
+
+  image_container = d3.selectAll('.row_tip')
+                      .append('div')
+                      .classed('MNIST_container', true)
+                      .style('margin-top', '10px')
+
+
+  image_container
+    .append('img')
+    .attr('src', 'img/pixel_images/background.png')
+    .style('width', '100px')
+    .style('height', '100px')
+    .style('display','block')
+    .style('float','left');
+    // .style('margin-left', '10px')
+    // .style('opacity',0.1)
+
+  image_container
+    .append('img')
+    .style('margin-left', '-100px')
+    .attr('src', function(){
+
+      pixel_image_name = 'img/pixel_images/' + inst_pixel + '.png'
+      return pixel_image_name;
+    })
+    .style('width', '100px')
+    .style('height', '100px')
+    .style('opacity', 0)
+    .style('opacity', 1)
+
+
 }
 
 function resize_container(args){
