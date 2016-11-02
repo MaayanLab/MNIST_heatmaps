@@ -1,7 +1,7 @@
 def main():
 
-  # filename = 'processed_MNIST/large_files/MNIST_row_labels.txt'
-  filename = 'processed_MNIST/random_subsampling/MNIST_1000x_random_subsample_0.txt'
+  filename = 'processed_MNIST/large_files/MNIST_row_labels.txt'
+  # filename = 'processed_MNIST/random_subsampling/MNIST_1000x_random_subsample_0.txt'
   df = load_df_using_clustergrammer(filename)
 
   ds_df, mbk_labels = run_kmeans_mini_batch(df, 100, axis=1)
@@ -54,10 +54,6 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
 
   col_array = np.asarray(df.columns.tolist())
 
-  print('\n\ncol_array')
-  print(len(col_array))
-  print('\n\n')
-
   # populate the dictionary
   for inst_clust in range(n_clusters):
 
@@ -68,24 +64,28 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
 
     check = mbk_labels[found_indices]
 
-    print(check)
-
-    # print(found_indices)
-
-    print( str(inst_clust) + ': ' + str(len(found_indices)) )
-
     clust_names = col_array[found_indices]
 
-    # print(clust_names)
-
     for inst_name in clust_names:
-      inst_digit = inst_name[0].split(': ')[1].split('-')[0]
+      if type(inst_name) is tuple:
+        inst_digit = inst_name[0].split(': ')[1].split('-')[0]
+      else:
+        inst_digit = inst_name.split('-')[0]
 
       tmp_index = digit_types.index(inst_digit)
 
-      print(digit_cats[inst_clust])
       digit_cats[inst_clust][tmp_index] = digit_cats[inst_clust][tmp_index] + 1
-      print(digit_cats[inst_clust])
+
+  # calculate fractions
+  for inst_clust in range(n_clusters):
+
+    counts = digit_cats[inst_clust]
+
+    inst_total = np.sum(counts)
+
+    digit_cats[inst_clust] = digit_cats[inst_clust] / inst_total
+
+    print(digit_cats[inst_clust])
 
 
   row_numbers = range(n_clusters)
@@ -98,6 +98,15 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
     inst_name = 'cell-clusters: ' + row_labels[i]
     inst_count =  'number in clust: '+ str(mbk_cluster_pop[i])
     inst_tuple = ( inst_name, inst_count )
+
+    for tmp_index in range(len(digit_types)):
+
+      tmp_digit = digit_types[tmp_index]
+      tmp_fraction = digit_cats[i][tmp_index]
+
+      fraction_string = str(tmp_digit) + ': ' + str(tmp_fraction)
+      inst_tuple = inst_tuple + (fraction_string,)
+
     cluster_cats.append(inst_tuple)
 
   ds = mbk_clusters
