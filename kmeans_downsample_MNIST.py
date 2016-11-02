@@ -41,10 +41,6 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
   print(mbk_cluster_pop)
   print('============================')
 
-  print('mbk_labels')
-  print(mbk_labels)
-  # print(mbk_labels)
-
   # make a dictionary with cluster keys
   # each value in the dictionary will be an array with 10 digits that gives
   # the fraction of digits in the cluster that fall into each digit category
@@ -53,8 +49,8 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
                  'Seven', 'Eight', 'Nine']
 
   # initialize digit_cats dictionary
-  for inst_type in range(n_clusters):
-    digit_cats[inst_type] = np.zeros([10])
+  for inst_clust in range(n_clusters):
+    digit_cats[inst_clust] = np.zeros([10])
 
   col_array = np.asarray(df.columns.tolist())
 
@@ -80,7 +76,16 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
 
     clust_names = col_array[found_indices]
 
-    print(clust_names)
+    # print(clust_names)
+
+    for inst_name in clust_names:
+      inst_digit = inst_name[0].split(': ')[1].split('-')[0]
+
+      tmp_index = digit_types.index(inst_digit)
+
+      print(digit_cats[inst_clust])
+      digit_cats[inst_clust][tmp_index] = digit_cats[inst_clust][tmp_index] + 1
+      print(digit_cats[inst_clust])
 
 
   row_numbers = range(n_clusters)
