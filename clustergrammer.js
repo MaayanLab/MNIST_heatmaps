@@ -63,6 +63,8 @@ var Clustergrammer =
 	// moved d3.slider to src
 	d3.slider = __webpack_require__(164);
 
+	/* eslint-disable */
+
 	var awesomplete = __webpack_require__(166);
 	// getting css from src
 	__webpack_require__(168);
@@ -534,6 +536,7 @@ var Clustergrammer =
 	    expand_button: true,
 	    max_allow_fs: 20,
 	    dendro_filter: { 'row': false, 'col': false },
+	    cat_filter: { 'row': false, 'col': false },
 	    row_tip_callback: null,
 	    col_tip_callback: null,
 	    tile_tip_callback: null,
@@ -558,7 +561,7 @@ var Clustergrammer =
 
 	  if (num_rows == num_cols) {
 
-	    // the sort here was causing errors
+	    // the sort here was causing errors 
 	    var rows = config.network_data.row_nodes_names;
 	    var cols = config.network_data.col_nodes_names;
 	    sim_mat = true;
@@ -757,17 +760,17 @@ var Clustergrammer =
 
 	  var request_filters = _.keys(requested_view);
 
-	  // find a view that matches all of the requested view/filter-attributes
+	  // find a view that matches all of the requested view/filter-attributes 
 	  _.each(request_filters, function (inst_filter) {
 
 	    inst_value = requested_view[inst_filter];
 
-	    // if the value is a number, then convert it to an integer
+	    // if the value is a number, then convert it to an integer 
 	    if (/[^a-z_]/i.test(inst_value)) {
 	      inst_value = parseInt(inst_value, 10);
 	    }
 
-	    // only run filtering if any of the views has the filter
+	    // only run filtering if any of the views has the filter 
 	    found_filter = false;
 	    _.each(views, function (tmp_view) {
 	      if (utils.has(tmp_view, inst_filter)) {
@@ -782,19 +785,19 @@ var Clustergrammer =
 	    }
 	  });
 
-	  // remove duplicate complete default states
+	  // remove duplicate complete default states 
 	  var export_views = [];
 	  var found_default = false;
 	  var check_default;
 	  var inst_default_state;
 
-	  // check if each view is a default state: all filters are at default
-	  // there can only be one of these
+	  // check if each view is a default state: all filters are at default 
+	  // there can only be one of these 
 	  _.each(views, function (inst_view) {
 
 	    check_default = true;
 
-	    // check each filter in a view to see if it is in the default state
+	    // check each filter in a view to see if it is in the default state 
 	    _.each(_.keys(params.viz.possible_filters), function (inst_filter) {
 
 	      inst_default_state = get_filter_default_state(params.viz.filter_data, inst_filter);
@@ -881,13 +884,13 @@ var Clustergrammer =
 
 	module.exports = function make_view_request(params, requested_view) {
 
-	  // this will add all necessary information to a view request
-	  // it will grab necessary view information from the sliders
+	  // this will add all necessary information to a view request 
+	  // it will grab necessary view information from the sliders 
 
-	  // only one component will be changed at a time
+	  // only one component will be changed at a time 
 	  var changed_component = _.keys(requested_view)[0];
 
-	  // add additional filter information from othe possible filters
+	  // add additional filter information from othe possible filters 
 	  _.each(_.keys(params.viz.possible_filters), function (inst_filter) {
 
 	    if (inst_filter != changed_component) {
@@ -1003,6 +1006,9 @@ var Clustergrammer =
 	  var viz = {};
 
 	  viz.root = params.root;
+
+	  viz.root_tips = params.root.replace('#', '.') + '_' + 'd3-tip';
+
 	  viz.viz_wrapper = params.root + ' .viz_wrapper';
 	  viz.do_zoom = params.do_zoom;
 	  viz.background_color = params.background_color;
@@ -1016,6 +1022,7 @@ var Clustergrammer =
 	  viz.expand_button = params.expand_button;
 	  viz.sim_mat = params.sim_mat;
 	  viz.dendro_filter = params.dendro_filter;
+	  viz.cat_filter = params.cat_filter;
 
 	  viz.viz_svg = viz.viz_wrapper + ' .viz_svg';
 
@@ -1214,7 +1221,7 @@ var Clustergrammer =
 
 	            // if all categories are of value type
 	            if (inst_info.type == 'cat_values') {
-	              inst_color = '#2F4F4F';
+	              inst_color = 'red';
 	            }
 
 	            viz.cat_colors[inst_rc][inst_cat][cat_tmp] = inst_color;
@@ -1257,12 +1264,12 @@ var Clustergrammer =
 
 	all_colors = ["#393b79", "#aec7e8", "#ff7f0e", "#ffbb78", "#98df8a", "#bcbd22", "#404040", "#ff9896", "#c5b0d5", "#8c564b", "#1f77b4", "#5254a3", "#FFDB58", "#c49c94", "#e377c2", "#7f7f7f", "#2ca02c", "#9467bd", "#dbdb8d", "#17becf", "#637939", "#6b6ecf", "#9c9ede", "#d62728", "#8ca252", "#8c6d31", "#bd9e39", "#e7cb94", "#843c39", "#ad494a", "#d6616b", "#7b4173", "#a55194", "#ce6dbd", "#de9ed6"];
 
-	// too light colors
+	// too light colors 
 	// "#e7969c",
-	// "#c7c7c7",
-	// "#f7b6d2",
-	// "#cedb9c",
-	// "#9edae5",
+	// "#c7c7c7", 
+	// "#f7b6d2", 
+	// "#cedb9c", 
+	// "#9edae5", 
 
 	function get_default_color() {
 	  return '#EEE';
@@ -1453,7 +1460,7 @@ var Clustergrammer =
 	  // var screen_width = window.innerWidth;
 	  // var screen_height = window.innerHeight;
 
-	  // // resize container, then resize visualization within container
+	  // // resize container, then resize visualization within container 
 	  // d3.select(params.root)
 	  //   .style('width', screen_width+'px')
 	  //   .style('height', screen_height+'px');
@@ -1541,25 +1548,25 @@ var Clustergrammer =
 	  viz.clust = {};
 	  viz.clust.margin = {};
 
-	  // margin on left/top of the clustergram/matrix
+	  // margin on left/top of the clustergram/matrix 
 	  // 1) norm_label margin and width
-	  // 2) cat_room and uni_margin
+	  // 2) cat_room and uni_margin 
 	  viz.clust.margin.left = viz.norm_labels.margin.left + viz.norm_labels.width.row + viz.cat_room.row + viz.uni_margin;
 
 	  viz.clust.margin.top = viz.norm_labels.margin.top + viz.norm_labels.width.col + viz.cat_room.col + viz.uni_margin;
 
 	  // the clustergram/matrix width is the svg width minus:
-	  // the margin of the clustergram on the left
-	  // the room for the spillover on the right
-	  // ** the dendro will fit in the spillover room on the right
+	  // the margin of the clustergram on the left 
+	  // the room for the spillover on the right 
+	  // ** the dendro will fit in the spillover room on the right 
 	  var ini_clust_width = viz.svg_dim.width - viz.clust.margin.left - viz.spillover_col_slant;
 
-	  // make tmp scale to calc height of triangle col labels
+	  // make tmp scale to calc height of triangle col labels 
 	  var tmp_x_scale = d3.scale.ordinal().rangeBands([0, ini_clust_width]).domain(_.range(viz.num_col_nodes));
 
 	  var triangle_height = tmp_x_scale.rangeBand() / 2;
 
-	  // prevent the visualization from being unnecessarily wide
+	  // prevent the visualization from being unnecessarily wide 
 	  if (triangle_height > viz.norm_labels.width.col) {
 	    var reduce_width = viz.norm_labels.width.col / triangle_height;
 	    ini_clust_width = ini_clust_width * reduce_width;
@@ -1579,10 +1586,10 @@ var Clustergrammer =
 
 	module.exports = function calc_clust_height(viz) {
 
-	  // the clustergram/matrix height is the svg width minus:
-	  // the margin of the clustergram on the top
-	  // the dendrogram
-	  // the bottom_space
+	  // the clustergram/matrix height is the svg width minus: 
+	  // the margin of the clustergram on the top 
+	  // the dendrogram 
+	  // the bottom_space 
 	  var ini_clust_height = viz.svg_dim.height - viz.clust.margin.top - viz.dendro_room.col - viz.bottom_space;
 
 	  viz.clust.dim.height = ini_clust_height;
@@ -1884,7 +1891,7 @@ var Clustergrammer =
 	    zoomed(params);
 	  });
 
-	  // rect width needs matrix and zoom parameters
+	  // rect width needs matrix and zoom parameters 
 	  params.viz.rect_width = params.viz.x_scale.rangeBand() - params.viz.border_width;
 
 	  params.viz.rect_height = params.viz.y_scale.rangeBand() - params.viz.border_width / params.viz.zoom_switch;
@@ -1923,7 +1930,7 @@ var Clustergrammer =
 
 	module.exports = function apply_zoom(params, zoom_info) {
 
-	  d3.selectAll('.tile_tip').style('display', 'none');
+	  d3.selectAll(params.viz.root_tips).style('display', 'none');
 
 	  zoom_info = zoom_rules_y(params, zoom_info);
 
@@ -2065,7 +2072,7 @@ var Clustergrammer =
 	    d3.selectAll(params.root + ' .row_label_group').select('text').style('font-size', params.labels.default_fs_row + 'px').attr('y', params.viz.rect_height * 0.5 + params.labels.default_fs_row * 0.35);
 	  }
 
-	  // columns
+	  // columns 
 	  //////////////////////////////////////
 
 
@@ -2140,6 +2147,12 @@ var Clustergrammer =
 	    var check_stop = Number(d3.select(params.root + ' .viz_svg').attr('stopped_zoom'));
 
 	    if (check_stop != 0) {
+
+	      /////////////////////////////////////////////////
+	      // zooming has stopped
+	      /////////////////////////////////////////////////
+
+	      d3.selectAll(params.viz.root_tips).style('display', 'block');
 
 	      // // experimental tile display toggling
 	      // d3.selectAll(params.root+' .hide_tile')
@@ -2225,7 +2238,7 @@ var Clustergrammer =
 	module.exports = function (params, inst_selection, inst_rc) {
 	  if (d3.select(inst_selection).style('display') != 'none') {
 
-	    // trim text that is longer than the container
+	    // trim text that is longer than the container 
 	    var inst_zoom;
 	    var inst_width;
 	    var trimmed_text;
@@ -2309,7 +2322,7 @@ var Clustergrammer =
 	    keep_num_char = current_num_char + 2;
 	    trimmed_text = original_text.substring(0, keep_num_char) + '..';
 
-	    // if '..' was added to original text
+	    // if '..' was added to original text 
 	    if (trimmed_text.length > original_text.length) {
 	      trimmed_text = original_text;
 	    }
@@ -2447,7 +2460,7 @@ var Clustergrammer =
 
 	module.exports = function zoom_rules_y(params, zoom_info) {
 
-	  // zoom in the x direction before zooming in the y direction
+	  // zoom in the x direction before zooming in the y direction 
 	  if (params.viz.zoom_switch_y > 1) {
 	    if (zoom_info.zoom_y < params.viz.zoom_switch_y) {
 	      zoom_info.trans_y = 0;
@@ -2457,7 +2470,7 @@ var Clustergrammer =
 	    }
 	  }
 
-	  // calculate panning room available in the y direction
+	  // calculate panning room available in the y direction 
 	  zoom_info.pan_room_y = (zoom_info.zoom_y - 1) * params.viz.clust.dim.height;
 
 	  // no positive panning or panning more than pan_room
@@ -2478,7 +2491,7 @@ var Clustergrammer =
 
 	module.exports = function zoom_rules_x(params, zoom_info) {
 
-	  // zoom in the y direction before zooming in the x direction
+	  // zoom in the y direction before zooming in the x direction 
 	  if (params.viz.zoom_switch > 1) {
 	    if (zoom_info.zoom_x < params.viz.zoom_switch) {
 	      zoom_info.trans_x = 0;
@@ -2488,7 +2501,7 @@ var Clustergrammer =
 	    }
 	  }
 
-	  // calculate panning room available in the x direction
+	  // calculate panning room available in the x direction 
 	  zoom_info.pan_room_x = (zoom_info.zoom_x - 1) * params.viz.clust.dim.width;
 
 	  // no positive panning or panning more than pan_room
@@ -2600,9 +2613,9 @@ var Clustergrammer =
 	  });
 
 	  // make category colorbars
-	  make_row_cat(params);
+	  make_row_cat(cgm);
 	  if (params.viz.show_categories.col) {
-	    make_col_cat(params);
+	    make_col_cat(cgm);
 	  }
 
 	  spillover(cgm);
@@ -2712,7 +2725,11 @@ var Clustergrammer =
 	  clust_group = svg_elem.append('g').attr('class', 'clust_container').attr('transform', 'translate(' + params.viz.clust.margin.left + ',' + params.viz.clust.margin.top + ')').append('g').attr('class', 'clust_group').classed('clust_group', true);
 
 	  // d3-tooltip - for tiles
-	  var tip = d3_tip_custom().attr('class', 'd3-tip tile_tip').direction('nw').offset([0, 0]).html(function (d) {
+	  var tip = d3_tip_custom().attr('class', function () {
+	    var root_tip_selector = params.viz.root_tips.replace('.', '');
+	    var class_string = root_tip_selector + ' d3-tip tile_tip';
+	    return class_string;
+	  }).style('display', 'none').direction('nw').offset([0, 0]).html(function (d) {
 	    var inst_value = String(d.value.toFixed(3));
 	    var tooltip_string;
 
@@ -3179,11 +3196,9 @@ var Clustergrammer =
 
 	        if (params.matrix.show_tile_tooltips) {
 
-	          d3.selectAll('.d3-tip').style('display', 'block');
+	          d3.selectAll('.tile_tip').style('display', 'block');
 
 	          tip.show.apply(inst_selection, args);
-
-	          console.log('show tile tooltip');
 
 	          if (params.tile_tip_callback != null) {
 	            var tile_info = args[0];
@@ -3204,6 +3219,8 @@ var Clustergrammer =
 	module.exports = function mouseout_tile(params, inst_selection, tip) {
 
 	  d3.select(inst_selection).classed('hovering', false);
+
+	  d3.selectAll('.tile_tip').style('display', 'none');
 
 	  _.each(['row', 'col'], function (inst_rc) {
 
@@ -3280,7 +3297,7 @@ var Clustergrammer =
 	      var inst_class = d3.select(this).attr('class');
 
 	      if (inst_class.indexOf('tile') >= 0) {
-	        setTimeout(fade_tips, 10000, this);
+	        setTimeout(fade_tips, 5000, this);
 	      }
 	    }
 
@@ -3542,7 +3559,7 @@ var Clustergrammer =
 	    var is_hovering = d3.select(inst_selection).classed('hovering');
 
 	    if (is_hovering) {
-	      d3.selectAll('.d3-tip').transition().duration(250).style('opacity', 0);
+	      d3.selectAll('.d3-tip').transition().duration(250).style('opacity', 0).style('display', 'none');
 	    }
 	  }
 
@@ -3603,8 +3620,6 @@ var Clustergrammer =
 
 	  d3.select(params.root + ' .row_label_zoom_container').selectAll('.row_label_group').on('dblclick', function (d) {
 
-	    // if (params.dendro_filter.col === false){
-
 	    var data_attr = '__data__';
 	    var row_name = this[data_attr].name;
 
@@ -3622,7 +3637,6 @@ var Clustergrammer =
 	    if (params.tile_click_hlight) {
 	      add_row_click_hlight(this, d.ini);
 	    }
-	    // }
 	  });
 
 	  make_row_tooltips(params);
@@ -4033,7 +4047,7 @@ var Clustergrammer =
 	    d3.select(params.root + ' .row_dendro_container').selectAll('path').style('opacity', triangle_opacity);
 	  }
 
-	  var row_dendro_filter_db = _.debounce(row_dendro_filter, 1500);
+	  var row_dendro_filter_db = _.debounce(row_dendro_filter, 700);
 
 	  function row_dendro_filter(d, inst_selection) {
 
@@ -4042,10 +4056,6 @@ var Clustergrammer =
 
 	      /* filter rows using dendrogram */
 	      if (cgm.params.dendro_filter.row === false) {
-
-	        // // disable row ordering and dendro slider
-	        // d3.selectAll('.toggle_row_order .btn').attr('disabled', true);
-	        // $(params.root+' .slider_row').slider('disable');
 
 	        d3.select(params.root + ' .slider_row').style('opacity', 0.5).style('pointer-events', 'none');
 
@@ -4199,20 +4209,20 @@ var Clustergrammer =
 
 	    d3.select(inst_selection).style('opacity', select_opacity);
 
-	    // top shade
+	    // top shade 
 	    d3.select(params.root + ' .clust_group').append('rect').style('width', params.viz.clust.dim.width + 'px').style('height', inst_data.pos_top + 'px').style('fill', 'black').style('opacity', inst_opacity).classed('dendro_shadow', true);
 
 	    bot_height = params.viz.clust.dim.height - inst_data.pos_bot;
-	    // bottom shade
+	    // bottom shade 
 	    d3.select(params.root + ' .clust_group').append('rect').style('width', params.viz.clust.dim.width + 'px').style('height', bot_height + 'px').attr('transform', 'translate(0,' + inst_data.pos_bot + ')').style('fill', 'black').style('opacity', inst_opacity).classed('dendro_shadow', true);
 	  } else if (inst_rc === 'col') {
 
 	    d3.select(inst_selection).style('opacity', select_opacity);
 
-	    // top shade
+	    // top shade 
 	    d3.select(params.root + ' .clust_group').append('rect').style('width', inst_data.pos_top + 'px').style('height', params.viz.clust.dim.height + 'px').style('fill', 'black').style('opacity', inst_opacity).classed('dendro_shadow', true);
 
-	    // bottom shade
+	    // bottom shade 
 	    bot_height = params.viz.clust.dim.width - inst_data.pos_bot;
 	    d3.select(params.root + ' .clust_group').append('rect').style('width', bot_height + 'px').style('height', params.viz.clust.dim.height + 'px').attr('transform', 'translate(' + inst_data.pos_bot + ',0)').style('fill', 'black').style('opacity', inst_opacity).classed('dendro_shadow', true);
 	  }
@@ -4347,11 +4357,6 @@ var Clustergrammer =
 	      /* filter cols using dendrogram */
 	      if (cgm.params.dendro_filter.col === false) {
 
-	        // // disable col ordering and dendro slider
-	        // d3.selectAll('.toggle_col_order .btn').attr('disabled', true);
-
-	        // $(params.root+' .slider_col').slider('disable');
-
 	        d3.select(params.root + ' .slider_col').style('opacity', 0.5).style('pointer-events', 'none');
 
 	        names.col = d.all_names;
@@ -4364,6 +4369,7 @@ var Clustergrammer =
 
 	        cgm.filter_viz_using_names(names);
 
+	        // save backup of the inst_view
 	        cgm.params.inst_nodes.row_nodes = inst_row_nodes;
 	        cgm.params.inst_nodes.col_nodes = inst_col_nodes;
 
@@ -4577,12 +4583,14 @@ var Clustergrammer =
 
 	module.exports = function make_tooltips(params) {
 
-	  // d3.selectAll('.row_tip').remove();
-
 	  if (params.labels.show_label_tooltips) {
 
 	    // d3-tooltip
-	    var row_tip = d3_tip_custom().attr('class', 'd3-tip row_tip').direction('e').offset([0, 10]).html(function (d) {
+	    var row_tip = d3_tip_custom().attr('class', function () {
+	      var root_tip_selector = params.viz.root_tips.replace('.', '');
+	      var class_string = root_tip_selector + ' d3-tip row_tip';
+	      return class_string;
+	    }).direction('e').offset([0, 10]).style('display', 'none').html(function (d) {
 	      var inst_name = d.name.replace(/_/g, ' ').split('#')[0];
 	      return "<span>" + inst_name + "</span>";
 	    });
@@ -4594,18 +4602,18 @@ var Clustergrammer =
 	      // do not include params.root selector since tooltips are not in root
 	      d3.select(' .row_tip').classed(d.name, true);
 
-	      d3.selectAll('.d3-tip').style('opacity', 0);
+	      d3.selectAll('.row_tip').style('display', 'block');
 
 	      d3.select(this).select('text').classed('active', true);
 
 	      row_tip.show(d);
 
 	      if (params.row_tip_callback != null) {
-	        params.row_tip_callback(d.name);
+	        params.row_tip_callback(d);
 	      }
 	    }).on('mouseout', function mouseout(d) {
 
-	      d3.select(' .row_tip').classed(d.name, false);
+	      d3.selectAll('.row_tip').style('display', 'none').classed(d.name, false);
 
 	      d3.select(this).select('text').classed('active', false);
 
@@ -4759,8 +4767,6 @@ var Clustergrammer =
 	    }
 	  }).on('dblclick', function (d) {
 
-	    // if (params.dendro_filter.row === false){
-
 	    var data_attr = '__data__';
 	    var col_name = this[data_attr].name;
 
@@ -4779,8 +4785,6 @@ var Clustergrammer =
 	    if (params.tile_click_hlight) {
 	      add_col_click_hlight(params, this, d.ini);
 	    }
-
-	    // }
 	  });
 		};
 
@@ -4845,24 +4849,29 @@ var Clustergrammer =
 	  if (params.labels.show_label_tooltips) {
 
 	    // d3-tooltip
-	    var col_tip = d3_tip_custom().attr('class', 'd3-tip col_tip').direction('w').offset([20, 0]).style('display', 'block').html(function (d) {
+	    var col_tip = d3_tip_custom().attr('class', function () {
+	      var root_tip_selector = params.viz.root_tips.replace('.', '');
+	      var class_string = root_tip_selector + ' d3-tip col_tip';
+	      return class_string;
+	    }).direction('w').offset([20, 0]).style('display', 'none').html(function (d) {
 	      var inst_name = d.name.replace(/_/g, ' ').split('#')[0];
 	      return "<span>" + inst_name + "</span>";
 	    });
 
 	    d3.select(params.viz.viz_wrapper).select('svg').select(params.root + ' .col_zoom_container').selectAll('.col_label_group').select('text').call(col_tip);
 
-	    d3.select(params.root + ' .col_zoom_container')
-	    // .selectAll('.col_label_text')
-	    .selectAll('.col_label_group')
-	    // .selectAll('text')
-	    .on('mouseover', function (d) {
+	    d3.select(params.root + ' .col_zoom_container').selectAll('.col_label_group').on('mouseover', function (d) {
+
+	      d3.selectAll('.col_tip').style('display', 'block');
+
 	      col_tip.show(d);
 	      if (params.col_tip_callback != null) {
 	        params.col_tip_callback(d);
 	      }
 	    }).on('mouseout', function () {
 	      col_tip.hide(this);
+
+	      d3.selectAll('.col_tip').style('display', 'none');
 	    });
 	  }
 		};
@@ -5025,7 +5034,7 @@ var Clustergrammer =
 	module.exports = function get_cat_title(viz, inst_cat, inst_rc) {
 	  var cat_title;
 
-	  // make default title if none is given
+	  // make default title if none is given 
 	  if (viz.cat_names[inst_rc][inst_cat] === inst_cat) {
 	    var inst_num = parseInt(inst_cat.split('-')[1], 10) + 1;
 	    cat_title = 'Category ' + inst_num;
@@ -5317,14 +5326,14 @@ var Clustergrammer =
 	      // unhighlight
 	      d3.selectAll(params.root + ' .row_label_group').select('rect').style('opacity', 0);
 
-	      // calc pan_dy
+	      // calc pan_dy 
 	      var idx = _.indexOf(entities, search_term);
 	      var inst_y_pos = params.viz.y_scale(idx);
 	      var pan_dy = params.viz.clust.dim.height / 2 - inst_y_pos;
 
 	      two_translate_zoom(params, 0, pan_dy, params.viz.zoom_switch);
 
-	      // highlight
+	      // highlight 
 	      d3.selectAll(params.root + ' .row_label_group').filter(function (d) {
 	        return d[prop] === search_term;
 	      }).select('rect').style('opacity', 1);
@@ -5349,7 +5358,14 @@ var Clustergrammer =
 
 	module.exports = function two_translate_zoom(params, pan_dx, pan_dy, fin_zoom) {
 
-	  d3.selectAll('.tile_tip').style('display', 'none');
+	  d3.selectAll(params.viz.root_tips).style('display', 'none');
+
+	  // setTimeout(show_tooltips, 1000);
+
+	  // function show_tooltips(){
+	  //   d3.selectAll(params.viz.root_tips)
+	  //     .style('display', 'none');
+	  // }
 
 	  // reset visible area
 	  var zoom_info = {};
@@ -5522,7 +5538,7 @@ var Clustergrammer =
 
 	  // console.log('label_constrain_and_trim');
 
-	  // reset text in rows and columns
+	  // reset text in rows and columns 
 	  d3.selectAll(params.root + ' .row_label_group').select('text').text(function (d) {
 	    return utils.normal_name(d);
 	  });
@@ -6104,7 +6120,7 @@ var Clustergrammer =
 	    return 'translate(' + tmp_left + ',' + tmp_top + ')';
 	  }).attr('height', viz.svg_dim.height + 'px');
 
-	  // resize dendro spillovers
+	  // resize dendro spillovers 
 	  var x_offset = viz.clust.margin.left + viz.clust.dim.width;
 	  var y_offset = tmp_top;
 	  var tmp_width = viz.dendro_room.row + viz.uni_margin;
@@ -6113,7 +6129,7 @@ var Clustergrammer =
 	    return 'translate(' + x_offset + ',' + y_offset + ')';
 	  });
 
-	  // hide spillover left top of col dendrogram
+	  // hide spillover left top of col dendrogram 
 	  x_offset = 0;
 	  y_offset = viz.clust.margin.top + viz.clust.dim.height;
 	  tmp_width = viz.clust.margin.left;
@@ -6137,7 +6153,7 @@ var Clustergrammer =
 	  var extra_x_room = 2.75;
 	  var extra_y_room = 1.2;
 
-	  // reposition category superlabels
+	  // reposition category superlabels 
 	  if (viz.show_categories.col) {
 
 	    d3.selectAll(viz.root + ' .col_cat_super').attr('transform', function (d) {
@@ -6628,8 +6644,8 @@ var Clustergrammer =
 	module.exports = function resize_label_bars(params, svg_group) {
 
 	  // // set bar scale
-	  // var val_max = Math.abs(_.max( params.network_data.row_nodes, function(d) {
-	  //   return Math.abs(d.value);
+	  // var val_max = Math.abs(_.max( params.network_data.row_nodes, function(d) { 
+	  //   return Math.abs(d.value); 
 	  // } ).value) ;
 
 	  // params.labels.bar_scale_row = d3.scale
@@ -6682,8 +6698,11 @@ var Clustergrammer =
 	var d3_tip_custom = __webpack_require__(58);
 	var reset_cat_opacity = __webpack_require__(108);
 	var ini_cat_opacity = __webpack_require__(109);
+	var click_filter_cats = __webpack_require__(191);
 
-	module.exports = function make_col_cat(params) {
+	module.exports = function make_col_cat(cgm) {
+
+	  var params = cgm.params;
 
 	  // make or reuse outer container
 	  if (d3.select(params.root + ' .col_cat_outer_container').empty()) {
@@ -6699,7 +6718,11 @@ var Clustergrammer =
 	  }
 
 	  // d3-tooltip
-	  var cat_tip = d3_tip_custom().attr('class', 'd3-tip').direction('s').offset([5, 0]).style('display', 'block').html(function (d) {
+	  var cat_tip = d3_tip_custom().attr('class', function () {
+	    var root_tip_selector = params.viz.root_tips.replace('.', '');
+	    var class_string = root_tip_selector + ' d3-tip col_cat_tip';
+	    return class_string;
+	  }).direction('s').offset([5, 0]).style('display', 'none').html(function (d) {
 	    return cat_tooltip_text(params, d, this, 'col');
 	  });
 
@@ -6729,6 +6752,11 @@ var Clustergrammer =
 	          var cat_room = params.viz.cat_room.symbol_width + params.viz.cat_room.separation;
 	          var inst_shift = inst_num * cat_room;
 	          return 'translate(0,' + inst_shift + ')';
+	        }).on('click', function (d) {
+
+	          if (d3.select(this).classed('cat_strings')) {
+	            click_filter_cats_db(cgm, d, this, 'col');
+	          }
 	        });
 	      } else {
 	        cat_rect = d3.select(inst_selection).select('.' + cat_rect_class);
@@ -6742,12 +6770,16 @@ var Clustergrammer =
 	        cat_tip.hide(this);
 	        reset_cat_opacity(params);
 	        d3.select(this).classed('hovering', false);
+
+	        d3.selectAll('.d3-tip').style('display', 'none');
 	      });
 
 	      ini_cat_opacity(params.viz, 'col', cat_rect, inst_cat);
 	    });
 	  });
-	};
+
+	  var click_filter_cats_db = _.debounce(click_filter_cats, 1500);
+		};
 
 /***/ },
 /* 107 */
@@ -6759,6 +6791,10 @@ var Clustergrammer =
 	var utils = __webpack_require__(2);
 
 	module.exports = function cat_tooltip_text(params, inst_data, inst_selection, inst_rc) {
+
+	  d3.selectAll('.col_cat_tip').style('display', 'block');
+
+	  d3.selectAll('.row_cat_tip').style('display', 'block');
 
 	  // category index
 	  var inst_cat = d3.select(inst_selection).attr('cat');
@@ -6784,7 +6820,7 @@ var Clustergrammer =
 
 	  d3.select(inst_selection).classed('hovering', true);
 
-	  setTimeout(highlight_categories, 700);
+	  setTimeout(highlight_categories, 500);
 
 	  return cat_string;
 
@@ -6810,11 +6846,12 @@ var Clustergrammer =
 	        }
 
 	        if (run_highlighting) {
+
 	          d3.selectAll(params.root + ' .' + tmp_rc + '_cat_group').selectAll('rect').style('opacity', function (d) {
 
 	            var inst_opacity = d3.select(this).style('opacity');
 
-	            if (d3.select(this).classed('cat_strings')) {
+	            if (d3.select(this).classed('cat_strings') && d3.select(this).classed('filtered_cat') === false) {
 
 	              var tmp_name;
 	              var tmp_cat = d3.select(this).attr('cat');
@@ -6850,11 +6887,11 @@ var Clustergrammer =
 
 	  _.each(['row', 'col'], function (inst_rc) {
 
-	    d3.selectAll(params.root + ' .' + inst_rc + '_cat_group').selectAll('rect').style('opacity', function (d) {
+	    d3.selectAll(params.root + ' .' + inst_rc + '_cat_group').selectAll('rect').style('opacity', function () {
 
 	      var inst_opacity = d3.select(this).style('opacity');
 
-	      if (d3.select(this).classed('cat_strings')) {
+	      if (d3.select(this).classed('cat_strings') && d3.select(this).classed('filtered_cat') === false) {
 	        inst_opacity = params.viz.cat_colors.opacity;
 	      }
 
@@ -6876,8 +6913,7 @@ var Clustergrammer =
 	  // debugger;
 
 	  var super_string = ': ';
-	  var has_title;
-	  var inst_type = viz.cat_info[inst_rc][inst_cat]['type'];
+	  var inst_type = viz.cat_info[inst_rc][inst_cat].type;
 
 	  // set opacity based on string or value cats
 	  if (inst_type === 'cat_strings') {
@@ -6899,14 +6935,13 @@ var Clustergrammer =
 	      if (typeof cat_value === 'string') {
 
 	        if (cat_value.indexOf(super_string) > -1) {
-	          has_title = true;
 	          cat_value = cat_value.split(super_string)[1];
 	        }
 	      }
 
 	      cat_value = parseFloat(cat_value);
 
-	      return viz.cat_info[inst_rc][inst_cat]['cat_scale'](cat_value);
+	      return viz.cat_info[inst_rc][inst_cat].cat_scale(cat_value);
 	    });
 	  }
 		};
@@ -6921,10 +6956,13 @@ var Clustergrammer =
 	var d3_tip_custom = __webpack_require__(58);
 	var reset_cat_opacity = __webpack_require__(108);
 	var ini_cat_opacity = __webpack_require__(109);
+	var click_filter_cats = __webpack_require__(191);
 
-	module.exports = function make_row_cat(params) {
+	module.exports = function make_row_cat(cgm) {
 	  var updating = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
+
+	  var params = cgm.params;
 
 	  // make or reuse outer container
 	  if (d3.select(params.root + ' .row_cat_outer_container').empty()) {
@@ -6947,7 +6985,11 @@ var Clustergrammer =
 	  }
 
 	  // d3-tooltip
-	  var cat_tip = d3_tip_custom().attr('class', 'd3-tip').direction('e').offset([5, 0]).style('display', 'block').html(function (d) {
+	  var cat_tip = d3_tip_custom().attr('class', function () {
+	    var root_tip_selector = params.viz.root_tips.replace('.', '');
+	    var class_string = root_tip_selector + ' d3-tip row_cat_tip';
+	    return class_string;
+	  }).direction('e').offset([5, 0]).style('display', 'none').html(function (d) {
 	    return cat_tooltip_text(params, d, this, 'row');
 	  });
 
@@ -7006,16 +7048,25 @@ var Clustergrammer =
 	          var cat_room = params.viz.cat_room.symbol_width + params.viz.cat_room.separation;
 	          var inst_shift = inst_num * cat_room;
 	          return 'translate(' + inst_shift + ',0)';
+	        }).on('click', function (d) {
+
+	          if (d3.select(this).classed('cat_strings')) {
+	            click_filter_cats_db(cgm, d, this, 'row');
+	          }
 	        }).on('mouseover', cat_tip.show).on('mouseout', function () {
 	          cat_tip.hide(this);
 	          reset_cat_opacity(params);
 	          d3.select(this).classed('hovering', false);
+
+	          d3.selectAll('.d3-tip').style('display', 'none');
 	        });
 
 	        ini_cat_opacity(params.viz, 'row', cat_rect, inst_cat, updating);
 	      });
 	    });
 	  }
+
+	  var click_filter_cats_db = _.debounce(click_filter_cats, 1500);
 		};
 
 /***/ },
@@ -7128,12 +7179,12 @@ var Clustergrammer =
 
 	  if (d3.select(params.root + ' .running_demo').empty()) {
 
-	    // prevent more than one demo from running at once
+	    // prevent more than one demo from running at once 
 	    d3.select(params.root + ' .play_button').classed('running_demo', true);
 
 	    toggle_play_button(params, false);
 
-	    // prevent user interaction while playing
+	    // prevent user interaction while playing 
 	    $.blockUI({ css: {
 	        border: 'none',
 	        padding: '15px',
@@ -7147,7 +7198,7 @@ var Clustergrammer =
 
 	    d3.selectAll('.blockUI').style('opacity', 0);
 
-	    // intro text
+	    // intro text 
 	    var inst_time = 750;
 
 	    if (cgm.params.viz.is_expand === false) {
@@ -7155,7 +7206,7 @@ var Clustergrammer =
 	      inst_time = inst_time - 1500;
 	    }
 
-	    // clustergram interaction
+	    // clustergram interaction 
 	    ///////////////////////////////////
 	    inst_time = run_segment(params, inst_time, play_intro);
 	    inst_time = run_segment(params, inst_time, play_zoom);
@@ -7163,7 +7214,7 @@ var Clustergrammer =
 	    inst_time = run_segment(params, inst_time, play_categories);
 	    inst_time = run_segment(params, inst_time, play_reorder_row);
 
-	    // sidebar interaction
+	    // sidebar interaction 
 	    ///////////////////////////////////
 	    inst_time = run_segment(params, inst_time, play_menu_button);
 	    inst_time = run_segment(params, inst_time, play_groups);
@@ -7171,7 +7222,7 @@ var Clustergrammer =
 	    inst_time = run_segment(params, inst_time, play_search);
 	    inst_time = run_segment(cgm, inst_time, play_filter);
 
-	    // conclusion
+	    // conclusion 
 	    ///////////////////////////////////
 	    inst_time = run_segment(params, inst_time, quick_cluster);
 	    inst_time = run_segment(params, inst_time, play_conclusion);
@@ -7251,7 +7302,7 @@ var Clustergrammer =
 
 	    var inst_text_num = i + 1;
 
-	    // make text box
+	    // make text box 
 	    //////////////////
 	    var inst_text_obj = d3.select(params.root + ' .demo_group').select('#text_' + inst_text_num).text(split_text[i]);
 	    var bbox = inst_text_obj[0][0].getBBox();
@@ -7489,7 +7540,7 @@ var Clustergrammer =
 	    var ini_delay = 2500;
 	    setTimeout(highlight_sidebar_element, ini_delay, params, 'gene_search_container');
 
-	    // manually mimic typing and autocomplete
+	    // manually mimic typing and autocomplete 
 	    setTimeout(type_out_search, ini_delay + 1000, params, 'E');
 	    setTimeout(type_out_search, ini_delay + 1500, params, 'EG');
 	    setTimeout(type_out_search, ini_delay + 2000, params, 'EGF');
@@ -7687,11 +7738,11 @@ var Clustergrammer =
 
 	  enter_exit_update(cgm, new_network_data, delays);
 
-	  make_row_cat(cgm.params);
+	  make_row_cat(cgm);
 	  make_row_cat_super_labels(cgm);
 
 	  if (cgm.params.viz.show_categories.col) {
-	    make_col_cat(cgm.params);
+	    make_col_cat(cgm);
 	  }
 
 	  if (cgm.params.viz.show_dendrogram) {
@@ -7709,7 +7760,8 @@ var Clustergrammer =
 
 	  cgm.params.viz.run_trans = true;
 
-	  d3.selectAll(cgm.params.root + ' .d3-tip').style('opacity', 0);
+	  // d3.selectAll(cgm.params.viz.root_tips)
+	  //   .style('opacity',0);
 
 	  setTimeout(enable_sidebar, 2500, cgm.params);
 		};
@@ -7808,12 +7860,17 @@ var Clustergrammer =
 
 	  var params = cgm.params;
 
-	  console.log('********** remove all tile tips');
 	  // remove old tooltips
-	  d3.selectAll(' .d3-tip').remove();
+	  d3.selectAll(params.viz.root_tips).remove();
+
+	  console.log('number of tile_tips: ' + String(d3.selectAll('.tile_tip')[0].length));
 
 	  // d3-tooltip - for tiles
-	  var tip = d3_tip_custom().attr('class', 'd3-tip tile_tip').direction('nw').offset([0, 0]).html(function (d) {
+	  var tip = d3_tip_custom().attr('class', function () {
+	    var root_tip_selector = params.viz.root_tips.replace('.', '');
+	    var class_string = root_tip_selector + ' d3-tip tile_tip';
+	    return class_string;
+	  }).direction('nw').offset([0, 0]).style('display', 'none').html(function (d) {
 	    var inst_value = String(d.value.toFixed(3));
 	    var tooltip_string;
 
@@ -8111,7 +8168,7 @@ var Clustergrammer =
 	  // Update
 	  ///////////////////////////
 
-	  // update tiles in x direction
+	  // update tiles in x direction 
 	  var update_row_tiles = cur_row_tiles.on('mouseover', function () {
 	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	      args[_key] = arguments[_key];
@@ -9169,7 +9226,7 @@ var Clustergrammer =
 
 	  function reset_demo(params) {
 
-	    // prevent more than one demo from running at once
+	    // prevent more than one demo from running at once 
 	    d3.select(params.root + ' .play_button').classed('running_demo', false);
 
 	    toggle_play_button(params, true);
@@ -9230,7 +9287,7 @@ var Clustergrammer =
 	    // var x_trans = params.viz.norm_labels.width.row * 0.9;
 
 	    // var row_trans = group_trans.split(',')[1].replace(')','');
-	    // var y_trans = String(Number(row_trans) + Number(container_trans) +
+	    // var y_trans = String(Number(row_trans) + Number(container_trans) + 
 	    //   params.viz.rect_height/2);
 
 	    var x_trans = Number(d3.select(params.root + ' .expand_button').attr('x').replace('px', ''));
@@ -9341,7 +9398,7 @@ var Clustergrammer =
 	      d3.select(this).select('path').style('fill', 'black').style('opacity', 0.5);
 	      d3.select(this).select('circle').style('opacity', 0.5);
 	    }).on('click', function () {
-	      // running from anonymous function to keep this defined correctly
+	      // running from anonymous function to keep this defined correctly 
 	      cgm.play_demo();
 	    });
 	  }
@@ -9361,7 +9418,7 @@ var Clustergrammer =
 	    var clust_x = Number(clust_transform.split('(')[1].split(',')[0]);
 	    var clust_y = Number(clust_transform.split(',')[1].replace(')', ''));
 
-	    // demo text container
+	    // demo text container 
 	    var demo_group = d3.select(params.root + ' .viz_svg').append('g').classed('demo_group', true).attr('transform', function () {
 	      var pos_x = clust_x + 20;
 	      var pos_y = clust_y + 40;
@@ -9517,7 +9574,7 @@ var Clustergrammer =
 	  // recalculate the visualization parameters using the updated network_data
 	  tmp_cgm.params = calc_viz_params(tmp_cgm.params, false);
 
-	  make_row_cat(tmp_cgm.params, true);
+	  make_row_cat(tmp_cgm, true);
 	  resize_viz(tmp_cgm);
 
 	  tmp_cgm.params.new_cat_data = cat_data;
@@ -9674,8 +9731,6 @@ var Clustergrammer =
 
 	module.exports = function reset_other_filter_sliders(cgm, filter_type, inst_state) {
 
-	  console.log('reset other filter sliders');
-
 	  var params = cgm.params;
 	  var inst_rc;
 	  var reset_rc;
@@ -9769,7 +9824,7 @@ var Clustergrammer =
 	    filter_title.text = 'Top ' + title.node + ' ' + title.measure + ': ';
 	  }
 
-	  // Enrichr specific rules
+	  // Enrichr specific rules 
 	  if (_.keys(params.viz.possible_filters).indexOf('enr_score_type') > -1) {
 	    if (type.node === 'col') {
 	      filter_title.text = 'Top Enriched Terms: ';
@@ -11263,7 +11318,7 @@ var Clustergrammer =
 
 	module.exports = function get_current_orders(params) {
 
-	  // get current orders
+	  // get current orders 
 	  var other_rc;
 	  _.each(['row', 'col'], function (inst_rc) {
 
@@ -11278,7 +11333,7 @@ var Clustergrammer =
 	      params.viz.inst_order[inst_rc] = d3.select(params.root + ' .toggle_' + other_rc + '_order').select('.active').attr('name');
 	    } else {
 
-	      // default to cluster ordering
+	      // default to cluster ordering 
 	      params.viz.inst_order[inst_rc] = 'clust';
 	    }
 	  });
@@ -11333,12 +11388,7 @@ var Clustergrammer =
 
 	    var requested_view = { 'enr_score_type': inst_state };
 
-	    requested_view = make_requested_view(params, requested_view);
-
-	    // console.log('\n---------\n requested_view from button filter')
-	    // console.log(requested_view)
-
-	    // update_network(config, params, requested_view);
+	    make_requested_view(params, requested_view);
 
 	    d3.select(params.root + ' .toggle_enr_score_type').attr('current_state', inst_state);
 	  });
@@ -11545,9 +11595,6 @@ var Clustergrammer =
 	  row.append('div').classed('clust_icon', true).append('a').attr('href', 'http://amp.pharm.mssm.edu/clustergrammer/help').attr('target', '_blank').append('i').classed('fa', true).classed('fa-question-circle', true).classed('icon_buttons', true).style('font-size', '25px');
 
 	  row.append('div').classed('clust_icon', true).append('i').classed('fa', true).classed('fa-share-alt', true).classed('icon_buttons', true).style('font-size', '25px').on('click', function () {
-
-	    console.log('clicking button');
-
 	    $(params.root + ' .share_info').modal('toggle');
 	    $('.share_url').val(window.location.href);
 	  });
@@ -11804,7 +11851,7 @@ var Clustergrammer =
 	  /* FileSaver.js
 	   * A saveAs() FileSaver implementation.
 	   * 2013-01-23
-	   *
+	   * 
 	   * By Eli Grey, http://eligrey.com
 	   * License: X11/MIT
 	   *   See LICENSE.md
@@ -12052,14 +12099,13 @@ var Clustergrammer =
 
 	  enrichr_section.append('a').html('Enrichr').on('click', function () {
 
-	    console.log('clicking export to Enrichr');
-
 	    var group_string = d3.select('.dendro_text input').attr('value');
 
 	    // replace all instances of commas with new line
 	    var gene_list = group_string.replace(/, /g, '\n');
 
 	    var enrichr_info = { list: gene_list, description: 'clustergrammer group list', popup: true };
+
 	    enrich(enrichr_info);
 	  });
 		};
@@ -12106,6 +12152,96 @@ var Clustergrammer =
 	  // $( params.root+' .opacity_slider' ).slider({
 	  //   value:1.0
 	  // });
+		};
+
+/***/ },
+/* 190 */,
+/* 191 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var utils = __webpack_require__(2);
+
+	module.exports = function click_filter_cats(cgm, inst_data, inst_selection, inst_rc) {
+
+	  var params = cgm.params;
+
+	  // category index
+	  var inst_cat = d3.select(inst_selection).attr('cat');
+	  var cat_name = inst_data[inst_cat];
+	  var tmp_nodes = params.network_data[inst_rc + '_nodes'];
+
+	  var found_nodes = _.filter(tmp_nodes, function (d) {
+
+	    return d[inst_cat] == cat_name;
+	  });
+
+	  var found_names = utils.pluck(found_nodes, 'name');
+
+	  var filter_names = {};
+	  filter_names[inst_rc] = found_names;
+
+	  if (cgm.params.cat_filter[inst_rc] === false) {
+
+	    var tmp_names = cgm.params.network_data.col_nodes_names;
+
+	    // keep a backup of the inst_view
+	    var inst_row_nodes = cgm.params.network_data.row_nodes;
+	    var inst_col_nodes = cgm.params.network_data.col_nodes;
+
+	    // run filtering using found names
+	    cgm.filter_viz_using_names(filter_names);
+
+	    // save backup of the inst_view
+	    cgm.params.inst_nodes.row_nodes = inst_row_nodes;
+	    cgm.params.inst_nodes.col_nodes = inst_col_nodes;
+
+	    // must set this after filtering has been run
+	    cgm.params.cat_filter[inst_rc] = tmp_names;
+
+	    highlight_filtered_cat(inst_rc, inst_cat, cat_name);
+	  } else {
+
+	    // get backup of names
+	    filter_names = cgm.params.cat_filter[inst_rc];
+
+	    // reset filter
+	    cgm.filter_viz_using_names(filter_names);
+	    // must set this after filtering has been run
+	    cgm.params.cat_filter[inst_rc] = false;
+
+	    // there are no filtered cats
+	    d3.selectAll(params.root + ' .' + inst_rc + '_cat_group').selectAll('rect').classed('filtered_cat', false);
+	  }
+
+	  function highlight_filtered_cat(inst_rc, inst_cat, cat_name) {
+
+	    d3.selectAll(params.root + ' .' + inst_rc + '_cat_group').selectAll('rect').style('opacity', function (d) {
+
+	      var inst_opacity = d3.select(this).style('opacity');
+
+	      if (d3.select(this).classed('cat_strings')) {
+
+	        var tmp_name;
+	        var tmp_cat = d3.select(this).attr('cat');
+
+	        // no need to filter out title
+	        tmp_name = d[tmp_cat];
+
+	        if (tmp_cat === inst_cat && tmp_name === cat_name) {
+	          inst_opacity = 1;
+
+	          d3.select(this).classed('filtered_cat', true);
+	        }
+	        // else {
+	        //   inst_opacity = params.viz.cat_colors.opacity/4;
+	        // }
+	      }
+
+	      return inst_opacity;
+	    });
+	  }
 		};
 
 /***/ }
