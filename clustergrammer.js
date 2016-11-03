@@ -561,7 +561,7 @@ var Clustergrammer =
 
 	  if (num_rows == num_cols) {
 
-	    // the sort here was causing errors 
+	    // the sort here was causing errors
 	    var rows = config.network_data.row_nodes_names;
 	    var cols = config.network_data.col_nodes_names;
 	    sim_mat = true;
@@ -760,17 +760,17 @@ var Clustergrammer =
 
 	  var request_filters = _.keys(requested_view);
 
-	  // find a view that matches all of the requested view/filter-attributes 
+	  // find a view that matches all of the requested view/filter-attributes
 	  _.each(request_filters, function (inst_filter) {
 
 	    inst_value = requested_view[inst_filter];
 
-	    // if the value is a number, then convert it to an integer 
+	    // if the value is a number, then convert it to an integer
 	    if (/[^a-z_]/i.test(inst_value)) {
 	      inst_value = parseInt(inst_value, 10);
 	    }
 
-	    // only run filtering if any of the views has the filter 
+	    // only run filtering if any of the views has the filter
 	    found_filter = false;
 	    _.each(views, function (tmp_view) {
 	      if (utils.has(tmp_view, inst_filter)) {
@@ -785,19 +785,19 @@ var Clustergrammer =
 	    }
 	  });
 
-	  // remove duplicate complete default states 
+	  // remove duplicate complete default states
 	  var export_views = [];
 	  var found_default = false;
 	  var check_default;
 	  var inst_default_state;
 
-	  // check if each view is a default state: all filters are at default 
-	  // there can only be one of these 
+	  // check if each view is a default state: all filters are at default
+	  // there can only be one of these
 	  _.each(views, function (inst_view) {
 
 	    check_default = true;
 
-	    // check each filter in a view to see if it is in the default state 
+	    // check each filter in a view to see if it is in the default state
 	    _.each(_.keys(params.viz.possible_filters), function (inst_filter) {
 
 	      inst_default_state = get_filter_default_state(params.viz.filter_data, inst_filter);
@@ -884,13 +884,13 @@ var Clustergrammer =
 
 	module.exports = function make_view_request(params, requested_view) {
 
-	  // this will add all necessary information to a view request 
-	  // it will grab necessary view information from the sliders 
+	  // this will add all necessary information to a view request
+	  // it will grab necessary view information from the sliders
 
-	  // only one component will be changed at a time 
+	  // only one component will be changed at a time
 	  var changed_component = _.keys(requested_view)[0];
 
-	  // add additional filter information from othe possible filters 
+	  // add additional filter information from othe possible filters
 	  _.each(_.keys(params.viz.possible_filters), function (inst_filter) {
 
 	    if (inst_filter != changed_component) {
@@ -1221,7 +1221,8 @@ var Clustergrammer =
 
 	            // if all categories are of value type
 	            if (inst_info.type == 'cat_values') {
-	              inst_color = 'red';
+	              // inst_color = 'red';
+	              inst_color = '#2F4F4F';
 	            }
 
 	            viz.cat_colors[inst_rc][inst_cat][cat_tmp] = inst_color;
@@ -1264,12 +1265,12 @@ var Clustergrammer =
 
 	all_colors = ["#393b79", "#aec7e8", "#ff7f0e", "#ffbb78", "#98df8a", "#bcbd22", "#404040", "#ff9896", "#c5b0d5", "#8c564b", "#1f77b4", "#5254a3", "#FFDB58", "#c49c94", "#e377c2", "#7f7f7f", "#2ca02c", "#9467bd", "#dbdb8d", "#17becf", "#637939", "#6b6ecf", "#9c9ede", "#d62728", "#8ca252", "#8c6d31", "#bd9e39", "#e7cb94", "#843c39", "#ad494a", "#d6616b", "#7b4173", "#a55194", "#ce6dbd", "#de9ed6"];
 
-	// too light colors 
+	// too light colors
 	// "#e7969c",
-	// "#c7c7c7", 
-	// "#f7b6d2", 
-	// "#cedb9c", 
-	// "#9edae5", 
+	// "#c7c7c7",
+	// "#f7b6d2",
+	// "#cedb9c",
+	// "#9edae5",
 
 	function get_default_color() {
 	  return '#EEE';
@@ -1460,7 +1461,7 @@ var Clustergrammer =
 	  // var screen_width = window.innerWidth;
 	  // var screen_height = window.innerHeight;
 
-	  // // resize container, then resize visualization within container 
+	  // // resize container, then resize visualization within container
 	  // d3.select(params.root)
 	  //   .style('width', screen_width+'px')
 	  //   .style('height', screen_height+'px');
@@ -1548,25 +1549,25 @@ var Clustergrammer =
 	  viz.clust = {};
 	  viz.clust.margin = {};
 
-	  // margin on left/top of the clustergram/matrix 
+	  // margin on left/top of the clustergram/matrix
 	  // 1) norm_label margin and width
-	  // 2) cat_room and uni_margin 
+	  // 2) cat_room and uni_margin
 	  viz.clust.margin.left = viz.norm_labels.margin.left + viz.norm_labels.width.row + viz.cat_room.row + viz.uni_margin;
 
 	  viz.clust.margin.top = viz.norm_labels.margin.top + viz.norm_labels.width.col + viz.cat_room.col + viz.uni_margin;
 
 	  // the clustergram/matrix width is the svg width minus:
-	  // the margin of the clustergram on the left 
-	  // the room for the spillover on the right 
-	  // ** the dendro will fit in the spillover room on the right 
+	  // the margin of the clustergram on the left
+	  // the room for the spillover on the right
+	  // ** the dendro will fit in the spillover room on the right
 	  var ini_clust_width = viz.svg_dim.width - viz.clust.margin.left - viz.spillover_col_slant;
 
-	  // make tmp scale to calc height of triangle col labels 
+	  // make tmp scale to calc height of triangle col labels
 	  var tmp_x_scale = d3.scale.ordinal().rangeBands([0, ini_clust_width]).domain(_.range(viz.num_col_nodes));
 
 	  var triangle_height = tmp_x_scale.rangeBand() / 2;
 
-	  // prevent the visualization from being unnecessarily wide 
+	  // prevent the visualization from being unnecessarily wide
 	  if (triangle_height > viz.norm_labels.width.col) {
 	    var reduce_width = viz.norm_labels.width.col / triangle_height;
 	    ini_clust_width = ini_clust_width * reduce_width;
@@ -1586,10 +1587,10 @@ var Clustergrammer =
 
 	module.exports = function calc_clust_height(viz) {
 
-	  // the clustergram/matrix height is the svg width minus: 
-	  // the margin of the clustergram on the top 
-	  // the dendrogram 
-	  // the bottom_space 
+	  // the clustergram/matrix height is the svg width minus:
+	  // the margin of the clustergram on the top
+	  // the dendrogram
+	  // the bottom_space
 	  var ini_clust_height = viz.svg_dim.height - viz.clust.margin.top - viz.dendro_room.col - viz.bottom_space;
 
 	  viz.clust.dim.height = ini_clust_height;
@@ -1891,7 +1892,7 @@ var Clustergrammer =
 	    zoomed(params);
 	  });
 
-	  // rect width needs matrix and zoom parameters 
+	  // rect width needs matrix and zoom parameters
 	  params.viz.rect_width = params.viz.x_scale.rangeBand() - params.viz.border_width;
 
 	  params.viz.rect_height = params.viz.y_scale.rangeBand() - params.viz.border_width / params.viz.zoom_switch;
@@ -2072,7 +2073,7 @@ var Clustergrammer =
 	    d3.selectAll(params.root + ' .row_label_group').select('text').style('font-size', params.labels.default_fs_row + 'px').attr('y', params.viz.rect_height * 0.5 + params.labels.default_fs_row * 0.35);
 	  }
 
-	  // columns 
+	  // columns
 	  //////////////////////////////////////
 
 
@@ -2238,7 +2239,7 @@ var Clustergrammer =
 	module.exports = function (params, inst_selection, inst_rc) {
 	  if (d3.select(inst_selection).style('display') != 'none') {
 
-	    // trim text that is longer than the container 
+	    // trim text that is longer than the container
 	    var inst_zoom;
 	    var inst_width;
 	    var trimmed_text;
@@ -2322,7 +2323,7 @@ var Clustergrammer =
 	    keep_num_char = current_num_char + 2;
 	    trimmed_text = original_text.substring(0, keep_num_char) + '..';
 
-	    // if '..' was added to original text 
+	    // if '..' was added to original text
 	    if (trimmed_text.length > original_text.length) {
 	      trimmed_text = original_text;
 	    }
@@ -2460,7 +2461,7 @@ var Clustergrammer =
 
 	module.exports = function zoom_rules_y(params, zoom_info) {
 
-	  // zoom in the x direction before zooming in the y direction 
+	  // zoom in the x direction before zooming in the y direction
 	  if (params.viz.zoom_switch_y > 1) {
 	    if (zoom_info.zoom_y < params.viz.zoom_switch_y) {
 	      zoom_info.trans_y = 0;
@@ -2470,7 +2471,7 @@ var Clustergrammer =
 	    }
 	  }
 
-	  // calculate panning room available in the y direction 
+	  // calculate panning room available in the y direction
 	  zoom_info.pan_room_y = (zoom_info.zoom_y - 1) * params.viz.clust.dim.height;
 
 	  // no positive panning or panning more than pan_room
@@ -2491,7 +2492,7 @@ var Clustergrammer =
 
 	module.exports = function zoom_rules_x(params, zoom_info) {
 
-	  // zoom in the y direction before zooming in the x direction 
+	  // zoom in the y direction before zooming in the x direction
 	  if (params.viz.zoom_switch > 1) {
 	    if (zoom_info.zoom_x < params.viz.zoom_switch) {
 	      zoom_info.trans_x = 0;
@@ -2501,7 +2502,7 @@ var Clustergrammer =
 	    }
 	  }
 
-	  // calculate panning room available in the x direction 
+	  // calculate panning room available in the x direction
 	  zoom_info.pan_room_x = (zoom_info.zoom_x - 1) * params.viz.clust.dim.width;
 
 	  // no positive panning or panning more than pan_room
@@ -4209,20 +4210,20 @@ var Clustergrammer =
 
 	    d3.select(inst_selection).style('opacity', select_opacity);
 
-	    // top shade 
+	    // top shade
 	    d3.select(params.root + ' .clust_group').append('rect').style('width', params.viz.clust.dim.width + 'px').style('height', inst_data.pos_top + 'px').style('fill', 'black').style('opacity', inst_opacity).classed('dendro_shadow', true);
 
 	    bot_height = params.viz.clust.dim.height - inst_data.pos_bot;
-	    // bottom shade 
+	    // bottom shade
 	    d3.select(params.root + ' .clust_group').append('rect').style('width', params.viz.clust.dim.width + 'px').style('height', bot_height + 'px').attr('transform', 'translate(0,' + inst_data.pos_bot + ')').style('fill', 'black').style('opacity', inst_opacity).classed('dendro_shadow', true);
 	  } else if (inst_rc === 'col') {
 
 	    d3.select(inst_selection).style('opacity', select_opacity);
 
-	    // top shade 
+	    // top shade
 	    d3.select(params.root + ' .clust_group').append('rect').style('width', inst_data.pos_top + 'px').style('height', params.viz.clust.dim.height + 'px').style('fill', 'black').style('opacity', inst_opacity).classed('dendro_shadow', true);
 
-	    // bottom shade 
+	    // bottom shade
 	    bot_height = params.viz.clust.dim.width - inst_data.pos_bot;
 	    d3.select(params.root + ' .clust_group').append('rect').style('width', bot_height + 'px').style('height', params.viz.clust.dim.height + 'px').attr('transform', 'translate(' + inst_data.pos_bot + ',0)').style('fill', 'black').style('opacity', inst_opacity).classed('dendro_shadow', true);
 	  }
@@ -5034,7 +5035,7 @@ var Clustergrammer =
 	module.exports = function get_cat_title(viz, inst_cat, inst_rc) {
 	  var cat_title;
 
-	  // make default title if none is given 
+	  // make default title if none is given
 	  if (viz.cat_names[inst_rc][inst_cat] === inst_cat) {
 	    var inst_num = parseInt(inst_cat.split('-')[1], 10) + 1;
 	    cat_title = 'Category ' + inst_num;
@@ -5326,14 +5327,14 @@ var Clustergrammer =
 	      // unhighlight
 	      d3.selectAll(params.root + ' .row_label_group').select('rect').style('opacity', 0);
 
-	      // calc pan_dy 
+	      // calc pan_dy
 	      var idx = _.indexOf(entities, search_term);
 	      var inst_y_pos = params.viz.y_scale(idx);
 	      var pan_dy = params.viz.clust.dim.height / 2 - inst_y_pos;
 
 	      two_translate_zoom(params, 0, pan_dy, params.viz.zoom_switch);
 
-	      // highlight 
+	      // highlight
 	      d3.selectAll(params.root + ' .row_label_group').filter(function (d) {
 	        return d[prop] === search_term;
 	      }).select('rect').style('opacity', 1);
@@ -5538,7 +5539,7 @@ var Clustergrammer =
 
 	  // console.log('label_constrain_and_trim');
 
-	  // reset text in rows and columns 
+	  // reset text in rows and columns
 	  d3.selectAll(params.root + ' .row_label_group').select('text').text(function (d) {
 	    return utils.normal_name(d);
 	  });
@@ -6120,7 +6121,7 @@ var Clustergrammer =
 	    return 'translate(' + tmp_left + ',' + tmp_top + ')';
 	  }).attr('height', viz.svg_dim.height + 'px');
 
-	  // resize dendro spillovers 
+	  // resize dendro spillovers
 	  var x_offset = viz.clust.margin.left + viz.clust.dim.width;
 	  var y_offset = tmp_top;
 	  var tmp_width = viz.dendro_room.row + viz.uni_margin;
@@ -6129,7 +6130,7 @@ var Clustergrammer =
 	    return 'translate(' + x_offset + ',' + y_offset + ')';
 	  });
 
-	  // hide spillover left top of col dendrogram 
+	  // hide spillover left top of col dendrogram
 	  x_offset = 0;
 	  y_offset = viz.clust.margin.top + viz.clust.dim.height;
 	  tmp_width = viz.clust.margin.left;
@@ -6153,7 +6154,7 @@ var Clustergrammer =
 	  var extra_x_room = 2.75;
 	  var extra_y_room = 1.2;
 
-	  // reposition category superlabels 
+	  // reposition category superlabels
 	  if (viz.show_categories.col) {
 
 	    d3.selectAll(viz.root + ' .col_cat_super').attr('transform', function (d) {
@@ -6644,8 +6645,8 @@ var Clustergrammer =
 	module.exports = function resize_label_bars(params, svg_group) {
 
 	  // // set bar scale
-	  // var val_max = Math.abs(_.max( params.network_data.row_nodes, function(d) { 
-	  //   return Math.abs(d.value); 
+	  // var val_max = Math.abs(_.max( params.network_data.row_nodes, function(d) {
+	  //   return Math.abs(d.value);
 	  // } ).value) ;
 
 	  // params.labels.bar_scale_row = d3.scale
@@ -7179,12 +7180,12 @@ var Clustergrammer =
 
 	  if (d3.select(params.root + ' .running_demo').empty()) {
 
-	    // prevent more than one demo from running at once 
+	    // prevent more than one demo from running at once
 	    d3.select(params.root + ' .play_button').classed('running_demo', true);
 
 	    toggle_play_button(params, false);
 
-	    // prevent user interaction while playing 
+	    // prevent user interaction while playing
 	    $.blockUI({ css: {
 	        border: 'none',
 	        padding: '15px',
@@ -7198,7 +7199,7 @@ var Clustergrammer =
 
 	    d3.selectAll('.blockUI').style('opacity', 0);
 
-	    // intro text 
+	    // intro text
 	    var inst_time = 750;
 
 	    if (cgm.params.viz.is_expand === false) {
@@ -7206,7 +7207,7 @@ var Clustergrammer =
 	      inst_time = inst_time - 1500;
 	    }
 
-	    // clustergram interaction 
+	    // clustergram interaction
 	    ///////////////////////////////////
 	    inst_time = run_segment(params, inst_time, play_intro);
 	    inst_time = run_segment(params, inst_time, play_zoom);
@@ -7214,7 +7215,7 @@ var Clustergrammer =
 	    inst_time = run_segment(params, inst_time, play_categories);
 	    inst_time = run_segment(params, inst_time, play_reorder_row);
 
-	    // sidebar interaction 
+	    // sidebar interaction
 	    ///////////////////////////////////
 	    inst_time = run_segment(params, inst_time, play_menu_button);
 	    inst_time = run_segment(params, inst_time, play_groups);
@@ -7222,7 +7223,7 @@ var Clustergrammer =
 	    inst_time = run_segment(params, inst_time, play_search);
 	    inst_time = run_segment(cgm, inst_time, play_filter);
 
-	    // conclusion 
+	    // conclusion
 	    ///////////////////////////////////
 	    inst_time = run_segment(params, inst_time, quick_cluster);
 	    inst_time = run_segment(params, inst_time, play_conclusion);
@@ -7302,7 +7303,7 @@ var Clustergrammer =
 
 	    var inst_text_num = i + 1;
 
-	    // make text box 
+	    // make text box
 	    //////////////////
 	    var inst_text_obj = d3.select(params.root + ' .demo_group').select('#text_' + inst_text_num).text(split_text[i]);
 	    var bbox = inst_text_obj[0][0].getBBox();
@@ -7540,7 +7541,7 @@ var Clustergrammer =
 	    var ini_delay = 2500;
 	    setTimeout(highlight_sidebar_element, ini_delay, params, 'gene_search_container');
 
-	    // manually mimic typing and autocomplete 
+	    // manually mimic typing and autocomplete
 	    setTimeout(type_out_search, ini_delay + 1000, params, 'E');
 	    setTimeout(type_out_search, ini_delay + 1500, params, 'EG');
 	    setTimeout(type_out_search, ini_delay + 2000, params, 'EGF');
@@ -8168,7 +8169,7 @@ var Clustergrammer =
 	  // Update
 	  ///////////////////////////
 
-	  // update tiles in x direction 
+	  // update tiles in x direction
 	  var update_row_tiles = cur_row_tiles.on('mouseover', function () {
 	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	      args[_key] = arguments[_key];
@@ -9226,7 +9227,7 @@ var Clustergrammer =
 
 	  function reset_demo(params) {
 
-	    // prevent more than one demo from running at once 
+	    // prevent more than one demo from running at once
 	    d3.select(params.root + ' .play_button').classed('running_demo', false);
 
 	    toggle_play_button(params, true);
@@ -9287,7 +9288,7 @@ var Clustergrammer =
 	    // var x_trans = params.viz.norm_labels.width.row * 0.9;
 
 	    // var row_trans = group_trans.split(',')[1].replace(')','');
-	    // var y_trans = String(Number(row_trans) + Number(container_trans) + 
+	    // var y_trans = String(Number(row_trans) + Number(container_trans) +
 	    //   params.viz.rect_height/2);
 
 	    var x_trans = Number(d3.select(params.root + ' .expand_button').attr('x').replace('px', ''));
@@ -9398,7 +9399,7 @@ var Clustergrammer =
 	      d3.select(this).select('path').style('fill', 'black').style('opacity', 0.5);
 	      d3.select(this).select('circle').style('opacity', 0.5);
 	    }).on('click', function () {
-	      // running from anonymous function to keep this defined correctly 
+	      // running from anonymous function to keep this defined correctly
 	      cgm.play_demo();
 	    });
 	  }
@@ -9418,7 +9419,7 @@ var Clustergrammer =
 	    var clust_x = Number(clust_transform.split('(')[1].split(',')[0]);
 	    var clust_y = Number(clust_transform.split(',')[1].replace(')', ''));
 
-	    // demo text container 
+	    // demo text container
 	    var demo_group = d3.select(params.root + ' .viz_svg').append('g').classed('demo_group', true).attr('transform', function () {
 	      var pos_x = clust_x + 20;
 	      var pos_y = clust_y + 40;
@@ -9824,7 +9825,7 @@ var Clustergrammer =
 	    filter_title.text = 'Top ' + title.node + ' ' + title.measure + ': ';
 	  }
 
-	  // Enrichr specific rules 
+	  // Enrichr specific rules
 	  if (_.keys(params.viz.possible_filters).indexOf('enr_score_type') > -1) {
 	    if (type.node === 'col') {
 	      filter_title.text = 'Top Enriched Terms: ';
@@ -11318,7 +11319,7 @@ var Clustergrammer =
 
 	module.exports = function get_current_orders(params) {
 
-	  // get current orders 
+	  // get current orders
 	  var other_rc;
 	  _.each(['row', 'col'], function (inst_rc) {
 
@@ -11333,7 +11334,7 @@ var Clustergrammer =
 	      params.viz.inst_order[inst_rc] = d3.select(params.root + ' .toggle_' + other_rc + '_order').select('.active').attr('name');
 	    } else {
 
-	      // default to cluster ordering 
+	      // default to cluster ordering
 	      params.viz.inst_order[inst_rc] = 'clust';
 	    }
 	  });
@@ -11851,7 +11852,7 @@ var Clustergrammer =
 	  /* FileSaver.js
 	   * A saveAs() FileSaver implementation.
 	   * 2013-01-23
-	   * 
+	   *
 	   * By Eli Grey, http://eligrey.com
 	   * License: X11/MIT
 	   *   See LICENSE.md

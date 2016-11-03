@@ -8,14 +8,29 @@ https://github.com/MaayanLab/clustergrammer-py
 '''
 
 from clustergrammer import Network
-net = Network()
+from copy import deepcopy
+tmp_net = deepcopy(Network())
 
 # load matrix tsv file
 filename = 'processed_MNIST/kmeans_downsample/tmp.txt'
 # filename = 'processed_MNIST/random_subsampling/MNIST_20x_random_subsample_0.txt'
 # filename = 'processed_MNIST/equal_digit_sampling/MNIST_20_digits_original.txt'
 
-net.load_file(filename)
+
+# filter out pixels with 'low' ink levels
+###########################################
+tmp_net.load_file(filename)
+tmp_df = tmp_net.dat_to_df()
+
+tmp_df = tmp_df['mat']
+tmp_df[tmp_df< 50] = 0
+
+new_df = {}
+new_df['mat'] = tmp_df
+net = deepcopy(Network())
+net.df_to_dat(new_df)
+
+
 
 # optional filtering and normalization
 ##########################################
