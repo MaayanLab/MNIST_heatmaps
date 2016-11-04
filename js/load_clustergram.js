@@ -106,29 +106,35 @@ function show_number(col_data){
       return inst_filename;
     })
     .style('width', '100px')
+    .style('height', '100px')
     .style('display','block')
     .style('margin-top', '10px');
 
-  d3.selectAll('.col_tip')
+  var number_info = d3.selectAll('.col_tip')
+    .append('div')
+    .classed('number_info', true);
+
+  number_info
     .append('p')
     .text(col_data['cat-0'])
     .style('margin-top','5px');
 
-  d3.selectAll('.col_tip')
+  number_info
     .append('p')
     .text(col_data['cat-1'])
     .style('margin-top','5px');
 
-  d3.selectAll('.col_tip')
+  number_info
     .append('p')
     .text(col_data['cat-2'])
     .style('margin-top','5px');
 
 }
 
-function show_pixel(inst_pixel){
+function show_pixel(pixel_data){
+  var inst_pixel = pixel_data.name;
 
-  var inst_pixel = inst_pixel.replace(' ','_');
+  inst_pixel = inst_pixel.replace(' ','_');
 
   image_container = d3.selectAll('.row_tip')
                       .append('div')
@@ -192,6 +198,7 @@ function show_two_numbers(inst_number){
       return inst_filename;
     })
     .style('width', '100px')
+    .style('height', '100px')
     .style('display','block')
     .style('float','left');
 
@@ -207,6 +214,7 @@ function show_two_numbers(inst_number){
       return inst_filename;
     })
     .style('width', '100px')
+    .style('height', '100px')
     .style('display','block')
     .style('margin-left', '110px')
 

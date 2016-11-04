@@ -22,8 +22,9 @@ filename = 'processed_MNIST/kmeans_downsample/tmp.txt'
 tmp_net.load_file(filename)
 tmp_df = tmp_net.dat_to_df()
 
+min_pixel_value = 60
 tmp_df = tmp_df['mat']
-tmp_df[tmp_df< 50] = 0
+tmp_df[tmp_df< min_pixel_value] = 0
 
 new_df = {}
 new_df['mat'] = tmp_df
