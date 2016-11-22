@@ -16,7 +16,10 @@ function make_clust(inst_network){
         'row_tip_callback':show_pixel,
         'col_tip_callback':show_number,
         'tile_tip_callback':show_number_and_pixel,
-        'sidebar_width':150
+        'sidebar_width':150,
+        tile_colors: ['#2F4F4F', '#9370DB'],
+        // value-cat colors
+        cat_value_colors: ['#006400', '#FF0000']
       };
 
       resize_container(args);
