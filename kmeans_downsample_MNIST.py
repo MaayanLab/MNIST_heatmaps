@@ -119,10 +119,11 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
     inst_tuple = ( inst_name, cat_name_string )
     inst_tuple = inst_tuple + (num_in_clust_string,)
 
-    # add cat fraction
-    max_cat_fraction = np.round(max_cat_fraction, decimals=2) * 100
-    fraction_string = 'Digit Pct: ' + str(max_cat_fraction)
-    inst_tuple = inst_tuple + (fraction_string,)
+    # leave this out
+    # # add cat fraction
+    # max_cat_fraction = np.round(max_cat_fraction, decimals=2) * 100
+    # fraction_string = 'Digit Pct: ' + str(max_cat_fraction)
+    # inst_tuple = inst_tuple + (fraction_string,)
 
     # add value categories for each number
     ########################################
