@@ -101,7 +101,6 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
 
     inst_name = 'MNIST-Clusters: ' + row_labels[i]
     num_in_clust_string =  'number in clust: '+ str(mbk_cluster_pop[i])
-    inst_tuple = ( inst_name, num_in_clust_string )
 
     # add category to majority digit in cluster
     ##############################################
@@ -115,7 +114,10 @@ def run_kmeans_mini_batch(df, n_clusters, axis=0):
 
     # add cat string
     cat_name_string = 'Majority Digit: ' + max_cat_name
-    inst_tuple = inst_tuple + (cat_name_string,)
+
+    # reordering the labels
+    inst_tuple = ( inst_name, cat_name_string )
+    inst_tuple = inst_tuple + (num_in_clust_string,)
 
     # add cat fraction
     max_cat_fraction = np.round(max_cat_fraction, decimals=2) * 100
