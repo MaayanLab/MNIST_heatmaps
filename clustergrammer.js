@@ -1686,7 +1686,9 @@ var Clustergrammer =
 	    }
 	  });
 
-	  params.viz.border_width = params.viz.x_scale.rangeBand() / params.viz.border_fraction;
+	  params.viz.border_width = {};
+	  params.viz.border_width.x = params.viz.x_scale.rangeBand() / params.viz.border_fraction;
+	  params.viz.border_width.y = params.viz.y_scale.rangeBand() / params.viz.border_fraction;
 
 	  return params;
 		};
@@ -1922,9 +1924,8 @@ var Clustergrammer =
 	  params.viz = calc_zoom_switching(params.viz);
 
 	  // rect width needs matrix and zoom parameters
-	  params.viz.rect_width = params.viz.x_scale.rangeBand() - params.viz.border_width;
-
-	  params.viz.rect_height = params.viz.y_scale.rangeBand() - params.viz.border_width / params.viz.zoom_switch;
+	  params.viz.rect_width = params.viz.x_scale.rangeBand() - params.viz.border_width.x;
+	  params.viz.rect_height = params.viz.y_scale.rangeBand() - params.viz.border_width.y; // / params.viz.zoom_switch;
 
 	  return params;
 	};
@@ -2194,8 +2195,8 @@ var Clustergrammer =
 	    }
 	  }
 
-	  // draw grid lines after drawing tiles
-	  draw_gridlines(params, row_nodes, col_nodes);
+	  // // draw grid lines after drawing tiles
+	  // draw_gridlines(params, row_nodes, col_nodes);
 
 	  // Matrix API
 	  return {
@@ -2236,12 +2237,12 @@ var Clustergrammer =
 	    var inst_index = _.indexOf(row_nodes_names, d.name);
 	    return 'translate(0,' + params.viz.y_scale(inst_index) + ') rotate(0)';
 	  }).append('line').attr('x1', 0).attr('x2', params.viz.clust.dim.width).style('stroke-width', function () {
-	    var inst_width;
-	    if (params.viz.zoom_switch > 1) {
-	      inst_width = params.viz.border_width / params.viz.zoom_switch;
-	    } else {
-	      inst_width = params.viz.border_width;
-	    }
+	    var inst_width = params.viz.border_width.y;
+	    // if (params.viz.zoom_switch > 1){
+	    //   inst_width = params.viz.border_width.y/params.viz.zoom_switch;
+	    // } else {
+	    //   inst_width = params.viz.border_width.y;
+	    // }
 	    return inst_width + 'px';
 	  }).style('stroke', 'white');
 
@@ -2250,12 +2251,12 @@ var Clustergrammer =
 	    var inst_index = _.indexOf(col_nodes_names, d.name);
 	    return 'translate(' + params.viz.x_scale(inst_index) + ') rotate(-90)';
 	  }).append('line').attr('x1', 0).attr('x2', -params.viz.clust.dim.height).style('stroke-width', function () {
-	    var inst_width;
-	    if (params.viz.zoom_switch_y > 1) {
-	      inst_width = params.viz.border_width / params.viz.zoom_switch_y;
-	    } else {
-	      inst_width = params.viz.border_width;
-	    }
+	    var inst_width = params.viz.border_width.x;
+	    // if (params.viz.zoom_switch_y > 1){
+	    //  inst_width = params.viz.border_width.x/ params.viz.zoom_switch_y;
+	    // } else {
+	    //  inst_width = params.viz.border_width.x;
+	    // }
 	    return inst_width + 'px';
 	  }).style('stroke', 'white');
 		};
@@ -2288,8 +2289,8 @@ var Clustergrammer =
 	      var rel_width_hlight = 6;
 	      var opacity_hlight = 0.85;
 
-	      var hlight_width = rel_width_hlight * params.viz.border_width;
-	      var hlight_height = rel_width_hlight * params.viz.border_width / params.viz.zoom_switch;
+	      var hlight_width = rel_width_hlight * params.viz.border_width.x;
+	      var hlight_height = rel_width_hlight * params.viz.border_width.y; ///params.viz.zoom_switch;
 
 	      // top highlight
 	      d3.select(clicked_rect.parentNode).append('rect').classed('click_hlight', true).classed('top_hlight', true).attr('width', params.viz.x_scale.rangeBand()).attr('height', hlight_height).attr('fill', params.matrix.hlight_color).attr('transform', function () {
@@ -2334,6 +2335,7 @@ var Clustergrammer =
 	var draw_dn_tile = __webpack_require__(43);
 	var mouseover_tile = __webpack_require__(44);
 	var mouseout_tile = __webpack_require__(45);
+	var fine_position_tile = __webpack_require__(199);
 
 	module.exports = function make_simple_rows(params, ini_inp_row_data, tip, row_selection) {
 
@@ -2386,9 +2388,7 @@ var Clustergrammer =
 	    }
 	    return inst_opacity;
 	  }).attr('transform', function (d) {
-	    var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	    var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	    return 'translate(' + x_pos + ',' + y_pos + ')';
+	    return fine_position_tile(params, d);
 	  });
 
 	  // // tile circles
@@ -2429,9 +2429,7 @@ var Clustergrammer =
 	  //     // return 0.1;
 	  //   })
 	  //   .attr('transform', function(d) {
-	  //     var x_pos = params.viz.x_scale(d.pos_x) + 0.5*params.viz.border_width + params.viz.rect_width/4;
-	  //     var y_pos = 0.5*params.viz.border_width/params.viz.zoom_switch + params.viz.rect_height/4;
-	  //     return 'translate(' + x_pos + ','+y_pos+')';
+	  //     return fine_position_tile(params, d);
 	  //   });
 
 
@@ -2448,9 +2446,7 @@ var Clustergrammer =
 	    }).enter().append('path').attr('class', 'tile_up').attr('d', function () {
 	      return draw_up_tile(params);
 	    }).attr('transform', function (d) {
-	      var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	      var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	      return 'translate(' + x_pos + ',' + y_pos + ')';
+	      fine_position_tile(params, d);
 	    }).style('fill', function () {
 	      return params.matrix.tile_colors[0];
 	    }).style('fill-opacity', function (d) {
@@ -2475,9 +2471,7 @@ var Clustergrammer =
 	    }).enter().append('path').attr('class', 'tile_dn').attr('d', function () {
 	      return draw_dn_tile(params);
 	    }).attr('transform', function (d) {
-	      var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	      var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	      return 'translate(' + x_pos + ',' + y_pos + ')';
+	      fine_position_tile(params, d);
 	    }).style('fill', function () {
 	      return params.matrix.tile_colors[1];
 	    }).style('fill-opacity', function (d) {
@@ -2522,9 +2516,9 @@ var Clustergrammer =
 	module.exports = function draw_up_tile(params) {
 
 	  var start_x = 0;
-	  var final_x = params.viz.x_scale.rangeBand() - params.viz.border_width / params.viz.zoom_switch_y;
+	  var final_x = params.viz.x_scale.rangeBand() - params.viz.border_width.x; ///params.viz.zoom_switch_y;
 	  var start_y = 0;
-	  var final_y = params.viz.y_scale.rangeBand() - params.viz.border_width / params.viz.zoom_switch;
+	  var final_y = params.viz.y_scale.rangeBand() - params.viz.border_width.y; ///params.viz.zoom_switch;
 
 	  var output_string = 'M' + start_x + ',' + start_y + ', L' + start_x + ', ' + final_y + ', L' + final_x + ',0 Z';
 
@@ -2540,9 +2534,9 @@ var Clustergrammer =
 	module.exports = function draw_dn_tile(params) {
 
 	  var start_x = 0;
-	  var final_x = params.viz.x_scale.rangeBand() - params.viz.border_width / params.viz.zoom_switch_y;
-	  var start_y = params.viz.y_scale.rangeBand() - params.viz.border_width / params.viz.zoom_switch;
-	  var final_y = params.viz.y_scale.rangeBand() - params.viz.border_width / params.viz.zoom_switch;
+	  var final_x = params.viz.x_scale.rangeBand() - params.viz.border_width.x;
+	  var start_y = params.viz.y_scale.rangeBand() - params.viz.border_width.y;
+	  var final_y = params.viz.y_scale.rangeBand() - params.viz.border_width.y;
 
 	  var output_string = 'M' + start_x + ', ' + start_y + ' ,   L' + final_x + ', ' + final_y + ',  L' + final_x + ',0 Z';
 
@@ -3113,7 +3107,7 @@ var Clustergrammer =
 	    var rel_width_hlight = 6;
 	    var opacity_hlight = 0.85;
 	    // var hlight_width  = rel_width_hlight*params.viz.border_width;
-	    var hlight_height = rel_width_hlight * params.viz.border_width / params.viz.zoom_switch;
+	    var hlight_height = rel_width_hlight * params.viz.border_width.x; // /params.viz.zoom_switch;
 
 	    d3.selectAll(params.root + ' .click_hlight').remove();
 
@@ -3282,8 +3276,8 @@ var Clustergrammer =
 	  var rel_width_hlight = 6;
 	  // var opacity_hlight = 0.85;
 
-	  var hlight_width = rel_width_hlight * params.viz.border_width;
-	  var hlight_height = rel_width_hlight * params.viz.border_width / params.viz.zoom_switch;
+	  var hlight_width = rel_width_hlight * params.viz.border_width.x;
+	  var hlight_height = rel_width_hlight * params.viz.border_width.y; ///params.viz.zoom_switch;
 	  // reposition tile highlight
 	  ////////////////////////////////
 
@@ -4377,7 +4371,7 @@ var Clustergrammer =
 	  var col_nodes_names = params.network_data.col_nodes_names;
 
 	  // offset click group column label
-	  var x_offset_click = params.viz.x_scale.rangeBand() / 2 + params.viz.border_width;
+	  var x_offset_click = params.viz.x_scale.rangeBand() / 2 + params.viz.border_width.x;
 	  // reduce width of rotated rects
 	  var reduce_rect_width = params.viz.x_scale.rangeBand() * 0.36;
 
@@ -4444,7 +4438,7 @@ var Clustergrammer =
 	  // add column label
 	  col_label_group.append('text').attr('x', 0)
 	  // manually tuned
-	  .attr('y', params.viz.x_scale.rangeBand() * 0.64).attr('dx', params.viz.border_width).attr('text-anchor', 'start').attr('full_name', function (d) {
+	  .attr('y', params.viz.x_scale.rangeBand() * 0.64).attr('dx', params.viz.border_width.x).attr('text-anchor', 'start').attr('full_name', function (d) {
 	    return d.name;
 	  })
 	  // original font size
@@ -4471,11 +4465,11 @@ var Clustergrammer =
 	  // add triangle under rotated labels
 	  col_label_group.append('path').style('stroke-width', 0).attr('d', function () {
 	    // x and y are flipped since its rotated
-	    var origin_y = -params.viz.border_width;
+	    var origin_y = -params.viz.border_width.y;
 	    var start_x = 0;
 	    var final_x = params.viz.x_scale.rangeBand() - reduce_rect_width;
-	    var start_y = -(params.viz.x_scale.rangeBand() - reduce_rect_width + params.viz.border_width);
-	    var final_y = -params.viz.border_width;
+	    var start_y = -(params.viz.x_scale.rangeBand() - reduce_rect_width + params.viz.border_width.y);
+	    var final_y = -params.viz.border_width.y;
 	    var output_string = 'M ' + origin_y + ',0 L ' + start_y + ',' + start_x + ', L ' + final_y + ',' + final_x + ' Z';
 	    return output_string;
 	  }).attr('fill', '#eee').style('opacity', 0).transition().delay(text_delay).duration(text_delay).style('opacity', params.viz.triangle_opacity);
@@ -4529,7 +4523,7 @@ var Clustergrammer =
 
 	    var rel_width_hlight = 6;
 	    var opacity_hlight = 0.85;
-	    var hlight_width = rel_width_hlight * params.viz.border_width;
+	    var hlight_width = rel_width_hlight * params.viz.border_width.x;
 	    // var hlight_height = rel_width_hlight*params.viz.border_width/params.viz.zoom_switch;
 
 	    d3.selectAll(params.root + ' .click_hlight').remove();
@@ -4819,6 +4813,7 @@ var Clustergrammer =
 	var toggle_dendro_view = __webpack_require__(51);
 	var show_visible_area = __webpack_require__(61);
 	var ini_zoom_info = __webpack_require__(36);
+	var fine_position_tile = __webpack_require__(199);
 
 	module.exports = function (cgm, inst_order, tmp_row_col) {
 
@@ -4877,9 +4872,7 @@ var Clustergrammer =
 	    });
 
 	    t.selectAll('.row').selectAll('.tile_circle').attr('transform', function (d) {
-	      var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width + params.viz.rect_width / 4;
-	      var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch + params.viz.rect_height / 4;
-	      return 'translate(' + x_pos + ' , ' + y_pos + ')';
+	      return fine_position_tile(params, d);
 	    });
 
 	    t.selectAll('.tile_up').attr('transform', function (d) {
@@ -5358,8 +5351,8 @@ var Clustergrammer =
 	  resize_super_labels(params, svg_group);
 	  resize_spillover(params.viz, svg_group);
 
-	  // specific to screen resize
-	  resize_grid_lines(params, svg_group);
+	  // // specific to screen resize
+	  // resize_grid_lines(params, svg_group);
 	  resize_borders(params, svg_group);
 
 	  // reset zoom and translate
@@ -5378,8 +5371,11 @@ var Clustergrammer =
 
 	  ini_cat_reorder(cgm);
 
-	  position_svg_dendro_slider(cgm, 'row');
-	  position_svg_dendro_slider(cgm, 'col');
+	  d3.select(cgm.params.root + ' .row_slider_group').style('opacity', 0);
+	  d3.select(cgm.params.root + ' .col_slider_group').style('opacity', 0);
+
+	  setTimeout(position_svg_dendro_slider, 500, cgm, 'row');
+	  setTimeout(position_svg_dendro_slider, 500, cgm, 'col');
 		};
 
 /***/ },
@@ -6383,12 +6379,12 @@ var Clustergrammer =
 	  });
 
 	  svg_group.selectAll('.horz_lines').select('line').attr('x2', params.viz.clust.dim.width).style('stroke-width', function () {
-	    var inst_width;
-	    if (params.viz.zoom_switch > 1) {
-	      inst_width = params.viz.border_width / params.viz.zoom_switch;
-	    } else {
-	      inst_width = params.viz.border_width;
-	    }
+	    var inst_width = params.viz.border_width.y;
+	    // if (params.viz.zoom_switch > 1){
+	    //   inst_width = params.viz.border_width.y/params.viz.zoom_switch;
+	    // } else {
+	    //   inst_width = params.viz.border_width.y;
+	    // }
 	    return inst_width + 'px';
 	  });
 
@@ -6398,12 +6394,12 @@ var Clustergrammer =
 	  });
 
 	  svg_group.selectAll('.vert_lines').select('line').attr('x2', -params.viz.clust.dim.height).style('stroke-width', function () {
-	    var inst_width;
-	    if (params.viz.zoom_switch_y > 1) {
-	      inst_width = params.viz.border_width / params.viz.zoom_switch_y;
-	    } else {
-	      inst_width = params.viz.border_width;
-	    }
+	    var inst_width = params.viz.border_width.x;
+	    // if (params.viz.zoom_switch_y > 1){
+	    //  inst_width = params.viz.border_width.x/ params.viz.zoom_switch_y;
+	    // } else {
+	    //  inst_width = params.viz.border_width.x;
+	    // }
 	    return inst_width + 'px';
 	  });
 		};
@@ -6673,8 +6669,8 @@ var Clustergrammer =
 
 	  var rel_width_hlight = 6;
 	  // var opacity_hlight = 0.85;
-	  var hlight_width = rel_width_hlight * params.viz.border_width;
-	  var hlight_height = rel_width_hlight * params.viz.border_width / params.viz.zoom_switch;
+	  var hlight_width = rel_width_hlight * params.viz.border_width.x;
+	  var hlight_height = rel_width_hlight * params.viz.border_width.y; ///params.viz.zoom_switch;
 
 	  // top highlight
 	  d3.select(params.root + ' .top_hlight').attr('width', params.viz.rect_width).attr('height', hlight_height).attr('transform', function () {
@@ -6813,7 +6809,7 @@ var Clustergrammer =
 	  }
 
 	  // offset click group column label
-	  var x_offset_click = params.viz.x_scale.rangeBand() / 2 + params.viz.border_width;
+	  var x_offset_click = params.viz.x_scale.rangeBand() / 2 + params.viz.border_width.x;
 
 	  svg_group.select(params.root + ' .col_container').attr('transform', 'translate(' + params.viz.clust.margin.left + ',' + params.viz.norm_labels.margin.top + ')');
 
@@ -6823,7 +6819,7 @@ var Clustergrammer =
 
 	  svg_group.selectAll('.col_label_group').attr('transform', 'translate(' + params.viz.x_scale.rangeBand() / 2 + ',' + x_offset_click + ') rotate(45)');
 
-	  svg_group.selectAll('.col_label_group').select('text').attr('y', params.viz.x_scale.rangeBand() * 0.60).attr('dx', 2 * params.viz.border_width);
+	  svg_group.selectAll('.col_label_group').select('text').attr('y', params.viz.x_scale.rangeBand() * 0.60).attr('dx', 2 * params.viz.border_width.x);
 		};
 
 /***/ },
@@ -6880,11 +6876,11 @@ var Clustergrammer =
 
 	  triangle_group.attr('d', function () {
 	    // x and y are flipped since its rotated
-	    var origin_y = -params.viz.border_width;
+	    var origin_y = -params.viz.border_width.x;
 	    var start_x = 0;
 	    var final_x = params.viz.x_scale.rangeBand() - reduce_rect_width;
-	    var start_y = -(params.viz.x_scale.rangeBand() - reduce_rect_width + params.viz.border_width);
-	    var final_y = -params.viz.border_width;
+	    var start_y = -(params.viz.x_scale.rangeBand() - reduce_rect_width + params.viz.border_width.x);
+	    var final_y = -params.viz.border_width.x;
 	    var output_string = 'M ' + origin_y + ',0 L ' + start_y + ',' + start_x + ', L ' + final_y + ',' + final_x + ' Z';
 	    return output_string;
 	  }).attr('fill', '#eee');
@@ -6963,14 +6959,18 @@ var Clustergrammer =
 	  params.viz.y_scale.rangeBands([0, params.viz.clust.dim.height]);
 
 	  // precalc rect_width and height
-	  params.viz.rect_width = params.viz.x_scale.rangeBand();
-	  params.viz.rect_height = params.viz.y_scale.rangeBand();
+	  // params.viz.rect_width = params.viz.x_scale.rangeBand();
+	  // params.viz.rect_height = params.viz.y_scale.rangeBand();
+
+	  // redefine border width
+	  params.viz.border_width.x = params.viz.x_scale.rangeBand() / params.viz.border_fraction;
+	  params.viz.border_width.y = params.viz.y_scale.rangeBand() / params.viz.border_fraction;
+
+	  params.viz.rect_width = params.viz.x_scale.rangeBand() - params.viz.border_width.x;
+	  params.viz.rect_height = params.viz.y_scale.rangeBand() - params.viz.border_width.y; // / params.viz.zoom_switch;
 
 	  // redefine zoom extent
 	  params.viz.real_zoom = params.viz.norm_labels.width.col / (params.viz.rect_width / 2);
-
-	  // redefine border width
-	  params.viz.border_width = params.viz.rect_width / 55;
 
 	  // the default font sizes are set here
 	  params = calc_default_fs(params);
@@ -6987,6 +6987,7 @@ var Clustergrammer =
 	var utils = __webpack_require__(2);
 	var draw_up_tile = __webpack_require__(42);
 	var draw_dn_tile = __webpack_require__(43);
+	var fine_position_tile = __webpack_require__(199);
 
 	module.exports = function resize_row_tiles(params, svg_group) {
 
@@ -7000,26 +7001,20 @@ var Clustergrammer =
 
 	  // reset tiles
 	  svg_group.selectAll('.row').selectAll('.tile').attr('transform', function (d) {
-	    var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	    var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	    return 'translate(' + x_pos + ',' + y_pos + ')';
+	    return fine_position_tile(params, d);
 	  }).attr('width', params.viz.rect_width).attr('height', params.viz.rect_height);
 
 	  // reset tile_up
 	  svg_group.selectAll('.row').selectAll('.tile_up').attr('d', function () {
 	    return draw_up_tile(params);
 	  }).attr('transform', function (d) {
-	    var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	    var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	    return 'translate(' + x_pos + ',' + y_pos + ')';
+	    return fine_position_tile(params, d);
 	  });
 
 	  svg_group.selectAll('.row').selectAll('.tile_dn').attr('d', function () {
 	    return draw_dn_tile(params);
 	  }).attr('transform', function (d) {
-	    var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	    var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	    return 'translate(' + x_pos + ',' + y_pos + ')';
+	    return fine_position_tile(params, d);
 	  });
 		};
 
@@ -7115,7 +7110,7 @@ var Clustergrammer =
 	      inst_translation = 'translate(' + tmp_left + ',' + tmp_top + '), rotate(-90)';
 	    }
 	    return inst_translation;
-	  });
+	  }).style('opacity', 1);
 		};
 
 /***/ },
@@ -7762,7 +7757,7 @@ var Clustergrammer =
 	  slider_group.append('rect').classed(inst_rc + '_slider_background', true).attr('height', rect_height + 'px').attr('width', rect_width + 'px').attr('fill', cgm.params.viz.background_color).attr('transform', function () {
 	    var translate_string = 'translate(-10, -5)';
 	    return translate_string;
-	  });
+	  }).style('opacity', 0);
 
 	  slider_group.append("line").style('stroke-width', slider_length / 7 + 'px').style('stroke', 'black').style('stroke-linecap', 'round').style('opacity', 0.0).attr("y1", 0).attr("y2", function () {
 	    return slider_length - 2;
@@ -8722,7 +8717,7 @@ var Clustergrammer =
 	  make_rows(cgm, duration);
 	  make_cols(cgm, duration);
 
-	  enter_grid_lines(params, delays, duration);
+	  // enter_grid_lines(params, delays, duration);
 
 	  setTimeout(label_constrain_and_trim, 2000, params);
 		};
@@ -8790,7 +8785,8 @@ var Clustergrammer =
 	  params.zoom_behavior.scaleExtent([1, params.viz.real_zoom * params.viz.zoom_switch]);
 
 	  // redefine border width
-	  params.viz.border_width = params.viz.x_scale.rangeBand() / 40;
+	  params.viz.border_width.x = params.viz.x_scale.rangeBand() / params.viz.border_fraction;
+	  params.viz.border_width.y = params.viz.y_scale.rangeBand() / params.viz.border_fraction;
 
 	  params = calc_default_fs(params);
 
@@ -8938,7 +8934,7 @@ var Clustergrammer =
 	  // Update
 	  ///////////////////////////
 
-	  // update tiles in x direction 
+	  // update tiles in x direction
 	  var update_row_tiles = cur_row_tiles.on('mouseover', function () {
 	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	      args[_key] = arguments[_key];
@@ -8955,7 +8951,7 @@ var Clustergrammer =
 	    update_row_tiles.transition().delay(delays.update).duration(duration).attr('width', params.viz.rect_width).attr('height', params.viz.rect_height).attr('transform', function (d) {
 	      if (_.contains(col_nodes_names, d.col_name)) {
 	        var inst_col_index = _.indexOf(col_nodes_names, d.col_name);
-	        var x_pos = params.viz.x_scale(inst_col_index) + 0.5 * params.viz.border_width;
+	        var x_pos = params.viz.x_scale(inst_col_index) + 0.5 * params.viz.border_width.x;
 	        return 'translate(' + x_pos + ',0)';
 	      }
 	    });
@@ -8963,7 +8959,7 @@ var Clustergrammer =
 	    update_row_tiles.attr('width', params.viz.rect_width).attr('height', params.viz.rect_height).attr('transform', function (d) {
 	      if (_.contains(col_nodes_names, d.col_name)) {
 	        var inst_col_index = _.indexOf(col_nodes_names, d.col_name);
-	        var x_pos = params.viz.x_scale(inst_col_index) + 0.5 * params.viz.border_width;
+	        var x_pos = params.viz.x_scale(inst_col_index) + 0.5 * params.viz.border_width.x;
 	        return 'translate(' + x_pos + ',0)';
 	      }
 	    });
@@ -9029,6 +9025,7 @@ var Clustergrammer =
 
 	var mouseover_tile = __webpack_require__(44);
 	var mouseout_tile = __webpack_require__(45);
+	var fine_position_tile = __webpack_require__(199);
 
 	module.exports = function enter_existing_row(params, delays, duration, cur_row_tiles, tip) {
 
@@ -9042,9 +9039,7 @@ var Clustergrammer =
 	  }).on('mouseout', function mouseout() {
 	    mouseout_tile(params, this, tip);
 	  }).attr('fill-opacity', 0).attr('transform', function (d) {
-	    var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	    var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	    return 'translate(' + x_pos + ',' + y_pos + ')';
+	    return fine_position_tile(params, d);
 	  });
 
 	  if (delays.run_transition) {
@@ -9081,6 +9076,7 @@ var Clustergrammer =
 	var draw_dn_tile = __webpack_require__(43);
 	var mouseover_tile = __webpack_require__(44);
 	var mouseout_tile = __webpack_require__(45);
+	var fine_position_tile = __webpack_require__(199);
 
 	module.exports = function update_split_tiles(params, inp_row_data, row_selection, delays, duration, cur_row_tiles, tip) {
 
@@ -9109,17 +9105,13 @@ var Clustergrammer =
 	    update_tiles_up.transition().delay(delays.update).duration(duration).attr('d', function () {
 	      return draw_up_tile(params);
 	    }).attr('transform', function (d) {
-	      var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	      var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	      return 'translate(' + x_pos + ',' + y_pos + ')';
+	      return fine_position_tile(params, d);
 	    });
 	  } else {
 	    update_tiles_up.attr('d', function () {
 	      return draw_up_tile(params);
 	    }).attr('transform', function (d) {
-	      var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	      var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	      return 'translate(' + x_pos + ',' + y_pos + ')';
+	      return fine_position_tile(params, d);
 	    });
 	  }
 
@@ -9143,17 +9135,13 @@ var Clustergrammer =
 	    update_tiles_dn.transition().delay(delays.update).duration(duration).attr('d', function () {
 	      return draw_dn_tile(params);
 	    }).attr('transform', function (d) {
-	      var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	      var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	      return 'translate(' + x_pos + ',' + y_pos + ')';
+	      return fine_position_tile(params, d);
 	    });
 	  } else {
 	    update_tiles_dn.attr('d', function () {
 	      return draw_dn_tile(params);
 	    }).attr('transform', function (d) {
-	      var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	      var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	      return 'translate(' + x_pos + ',' + y_pos + ')';
+	      return fine_position_tile(params, d);
 	    });
 	  }
 
@@ -9253,12 +9241,12 @@ var Clustergrammer =
 	    var inst_index = _.indexOf(row_nodes_names, d.name);
 	    return 'translate(0,' + params.viz.y_scale(inst_index) + ') rotate(0)';
 	  }).append('line').attr('x1', 0).attr('x2', params.viz.clust.dim.width).style('stroke-width', function () {
-	    var inst_width;
-	    if (params.viz.zoom_switch > 1) {
-	      inst_width = params.viz.border_width / params.viz.zoom_switch;
-	    } else {
-	      inst_width = params.viz.border_width;
-	    }
+	    var inst_width = params.viz.border_width.y;
+	    // if (params.viz.zoom_switch > 1){
+	    //   inst_width = params.viz.border_width.y/params.viz.zoom_switch;
+	    // } else {
+	    //   inst_width = params.viz.border_width.y;
+	    // }
 	    return inst_width + 'px';
 	  }).attr('opacity', 0).attr('stroke', 'white').transition().delay(delays.enter).duration(2 * duration).attr('opacity', 1);
 
@@ -9267,12 +9255,12 @@ var Clustergrammer =
 	    var inst_index = _.indexOf(col_nodes_names, d.name);
 	    return 'translate(' + params.viz.x_scale(inst_index) + ') rotate(-90)';
 	  }).append('line').attr('x1', 0).attr('x2', -params.viz.clust.dim.height).style('stroke-width', function () {
-	    var inst_width;
-	    if (params.viz.zoom_switch_y > 1) {
-	      inst_width = params.viz.border_width / params.viz.zoom_switch_y;
-	    } else {
-	      inst_width = params.viz.border_width;
-	    }
+	    var inst_width = params.viz.border_width.x;
+	    // if (params.viz.zoom_switch_y > 1){
+	    //  inst_width = params.viz.border_width.x/ params.viz.zoom_switch_y;
+	    // } else {
+	    //  inst_width = params.viz.border_width.x;
+	    // }
 	    return inst_width + 'px';
 	  }).style('stroke', 'white').attr('opacity', 0).transition().delay(delays.enter).duration(2 * duration).attr('opacity', 1);
 		};
@@ -9311,6 +9299,7 @@ var Clustergrammer =
 	var enter_split_tiles = __webpack_require__(146);
 	var mouseover_tile = __webpack_require__(44);
 	var mouseout_tile = __webpack_require__(45);
+	var fine_position_tile = __webpack_require__(199);
 
 	// make each row in the clustergram
 	module.exports = function enter_new_rows(params, ini_inp_row_data, delays, duration, tip, row_selection) {
@@ -9347,9 +9336,7 @@ var Clustergrammer =
 	  });
 
 	  tile.attr('transform', function (d) {
-	    var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	    var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	    return 'translate(' + x_pos + ',' + y_pos + ')';
+	    return fine_position_tile(params, d);
 	  });
 
 	  if (params.matrix.tile_type == 'updn') {
@@ -9365,6 +9352,7 @@ var Clustergrammer =
 
 	var draw_up_tile = __webpack_require__(42);
 	var draw_dn_tile = __webpack_require__(43);
+	var fine_position_tile = __webpack_require__(199);
 
 	module.exports = function enter_split_tiles(params, inp_row_data, row_selection, tip, delays, duration, tile) {
 
@@ -9379,9 +9367,7 @@ var Clustergrammer =
 	  }).enter().append('path').attr('class', 'tile_up').attr('d', function () {
 	    return draw_up_tile(params);
 	  }).attr('transform', function (d) {
-	    var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	    var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	    return 'translate(' + x_pos + ',' + y_pos + ')';
+	    return fine_position_tile(params, d);
 	  }).style('fill', function () {
 	    return params.matrix.tile_colors[0];
 	  }).on('mouseover', function (p) {
@@ -9417,9 +9403,7 @@ var Clustergrammer =
 	  }).enter().append('path').attr('class', 'tile_dn').attr('d', function () {
 	    return draw_dn_tile(params);
 	  }).attr('transform', function (d) {
-	    var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width;
-	    var y_pos = 0.5 * params.viz.border_width / params.viz.zoom_switch;
-	    return 'translate(' + x_pos + ',' + y_pos + ')';
+	    return fine_position_tile(params, d);
 	  }).style('fill', function () {
 	    return params.matrix.tile_colors[1];
 	  }).on('mouseover', function (p) {
@@ -13227,6 +13211,18 @@ var Clustergrammer =
 	  //   value:1.0
 	  // });
 		};
+
+/***/ },
+/* 199 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function fine_position_tile(params, d) {
+	  var x_pos = params.viz.x_scale(d.pos_x) + 0.5 * params.viz.border_width.x;
+	  var y_pos = 0.5 * params.viz.border_width.y;
+	  return 'translate(' + x_pos + ',' + y_pos + ')';
+	};
 
 /***/ }
 /******/ ]);
