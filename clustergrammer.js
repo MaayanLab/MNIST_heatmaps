@@ -74,9 +74,9 @@ var Clustergrammer =
 	__webpack_require__(179);
 	__webpack_require__(183);
 
-	/* clustergrammer v1.10.0
+	/* clustergrammer v1.10.6
 	 * Nick Fernandez, Ma'ayan Lab, Icahn School of Medicine at Mount Sinai
-	 * (c) 2016
+	 * (c) 2017
 	 */
 	function Clustergrammer(args) {
 
@@ -565,6 +565,7 @@ var Clustergrammer =
 	    row_tip_callback: null,
 	    col_tip_callback: null,
 	    tile_tip_callback: null,
+	    matrix_update_callback: null,
 	    dendro_callback: null,
 	    new_cat_data: null
 	  };
@@ -3488,7 +3489,6 @@ var Clustergrammer =
 
 	  dendro_traps.on('mouseover', function (d) {
 
-	    var inst_rc;
 	    if (params.sim_mat) {
 	      inst_rc = 'both';
 	    }
@@ -3992,6 +3992,8 @@ var Clustergrammer =
 	    /* filter using dendrogram */
 	    if (cgm.params.dendro_filter.row === false && cgm.params.dendro_filter.col === false && cgm.params.cat_filter.row === false && cgm.params.cat_filter.col === false) {
 
+	      // Run Filtering
+	      ///////////////////
 	      // use class as 'global' variable
 	      d3.select(cgm.params.root + ' .' + inst_rc + '_dendro_icons_group').attr('transform', 'translate(0,0), scale(1,1)').classed('ran_filter', true);
 
@@ -4002,7 +4004,13 @@ var Clustergrammer =
 
 	      // do not display other crop buttons since they are inactive
 	      d3.select(cgm.params.root + ' .' + other_rc + '_dendro_icons_container').style('display', 'none');
+
+	      // do not display brush-crop button if performing dendro crop
+	      d3.select(cgm.params.root + ' .crop_button').style('opacity', 0.2);
 	    } else {
+
+	      // Undo Filtering
+	      ///////////////////
 	      // use class as 'global' variable
 	      d3.select(cgm.params.root + ' .' + inst_rc + '_dendro_icons_group').attr('transform', 'translate(0,0), scale(1,1)').classed('ran_filter', false);
 
@@ -4015,6 +4023,9 @@ var Clustergrammer =
 
 	      // display other crop buttons when cropping has not been done
 	      d3.select(cgm.params.root + ' .' + other_rc + '_dendro_icons_container').style('display', 'block');
+
+	      // display brush-crop button if not performing dendro crop
+	      d3.select(cgm.params.root + ' .crop_button').style('opacity', 1);
 	    }
 
 	    run_dendro_filter(cgm, d, inst_rc);
@@ -4050,6 +4061,11 @@ var Clustergrammer =
 
 	    names[inst_rc] = d.all_names;
 
+	    // // run optional callback function
+	    // if (cgm.params.crop_callback != null){
+	    //   cgm.params.crop_callback();
+	    // }
+
 	    var tmp_names = cgm.params.network_data[inst_rc + '_nodes_names'];
 
 	    // keep a backup of the inst_view
@@ -4070,6 +4086,11 @@ var Clustergrammer =
 	  } else {
 
 	    names[inst_rc] = cgm.params.dendro_filter[inst_rc];
+
+	    // // run optional callback function
+	    // if (cgm.params.crop_callback != null){
+	    //   cgm.params.crop_callback();
+	    // }
 
 	    cgm.filter_viz_using_names(names);
 	    cgm.params.dendro_filter[inst_rc] = false;
@@ -7471,7 +7492,7 @@ var Clustergrammer =
 
 	var utils = __webpack_require__(2);
 
-	module.exports = function get_cat_nodes(params, inst_data, inst_selection, inst_rc) {
+	module.exports = function get_cat_names(params, inst_data, inst_selection, inst_rc) {
 
 	  // category index
 	  var inst_cat = d3.select(inst_selection).attr('cat');
@@ -8435,6 +8456,11 @@ var Clustergrammer =
 	var run_zoom = __webpack_require__(76);
 
 	module.exports = function update_viz_with_network(cgm, new_network_data) {
+
+	  // run optional callback function
+	  if (cgm.params.matrix_update_callback != null) {
+	    cgm.params.matrix_update_callback();
+	  }
 
 	  var inst_group_level = cgm.params.group_level;
 	  var inst_crop_fitler = cgm.params.crop_filter_nodes;
@@ -10992,8 +11018,16 @@ var Clustergrammer =
 
 	  function brushend() {
 
-	    var brushing_extent = brush.extent();
+	    // // run optional callback function
+	    // if (cgm.params.crop_callback != null){
+	    //   cgm.params.crop_callback();
+	    // }
 
+	    // do not display dendro crop buttons when cropping with brushing
+	    d3.select(cgm.params.root + ' .col_dendro_icons_container').style('display', 'none');
+	    d3.select(cgm.params.root + ' .row_dendro_icons_container').style('display', 'none');
+
+	    var brushing_extent = brush.extent();
 	    var brush_start = brushing_extent[0];
 	    var brush_end = brushing_extent[1];
 
@@ -12826,41 +12860,55 @@ var Clustergrammer =
 
 	  row.append('div').classed('clust_icon', true).style('float', 'left').style('width', width_pct).style('padding-left', padding_left).style('padding-right', '-5px').append('i').classed('fa', true).classed('fa-crop', true).classed('crop_button', true).classed('icon_buttons', true).style('font-size', '25px').on('click', function () {
 
-	    var is_crop = d3.select(this).classed('fa-crop');
+	    // do nothing if dendro filtering has been done
+	    if (cgm.params.dendro_filter.row === false && cgm.params.dendro_filter.col === false) {
 
-	    var is_undo = d3.select(this).classed('fa-undo');
+	      var is_crop = d3.select(this).classed('fa-crop');
 
-	    // press crop button (can be active/incative)
-	    if (is_crop) {
+	      var is_undo = d3.select(this).classed('fa-undo');
 
-	      // keep list of names to return to state
-	      cgm.params.crop_filter_nodes = {};
-	      cgm.params.crop_filter_nodes.row_nodes = cgm.params.network_data.row_nodes;
-	      cgm.params.crop_filter_nodes.col_nodes = cgm.params.network_data.col_nodes;
+	      // press crop button (can be active/incative)
+	      if (is_crop) {
 
-	      cgm.crop_matrix();
+	        // keep list of names to return to state
+	        cgm.params.crop_filter_nodes = {};
+	        cgm.params.crop_filter_nodes.row_nodes = cgm.params.network_data.row_nodes;
+	        cgm.params.crop_filter_nodes.col_nodes = cgm.params.network_data.col_nodes;
 
-	      if (d3.select(this).classed('active_cropping') === false) {
-	        // set active_cropping (button turns red)
-	        d3.select(this).classed('active_cropping', true).style('color', 'red');
-	      } else {
-	        // deactivate cropping (button turns blue)
-	        d3.select(this).classed('active_cropping', false).style('color', '#337ab7');
+	        cgm.crop_matrix();
 
-	        deactivate_cropping(cgm);
+	        if (d3.select(this).classed('active_cropping') === false) {
+
+	          // set active_cropping (button turns red)
+	          d3.select(this).classed('active_cropping', true).style('color', 'red');
+	        } else {
+	          // deactivate cropping (button turns blue)
+	          d3.select(this).classed('active_cropping', false).style('color', '#337ab7');
+
+	          deactivate_cropping(cgm);
+	        }
 	      }
+
+	      // press undo button
+	      if (is_undo) {
+
+	        // // run optional callback function
+	        // if (cgm.params.crop_callback != null){
+	        //   cgm.params.crop_callback();
+	        // }
+
+	        d3.select(params.root + ' .crop_button').style('color', '#337ab7').classed('fa-crop', true).classed('fa-undo', false);
+
+	        // cgm.filter_viz_using_names(cgm.params.crop_filter_nodes);
+	        cgm.filter_viz_using_nodes(cgm.params.crop_filter_nodes);
+
+	        // show dendro crop buttons after brush-cropping has been undone
+	        d3.select(cgm.params.root + ' .col_dendro_icons_container').style('display', 'block');
+	        d3.select(cgm.params.root + ' .row_dendro_icons_container').style('display', 'block');
+	      }
+
+	      two_translate_zoom(params, 0, 0, 1);
 	    }
-
-	    // press undo button
-	    if (is_undo) {
-
-	      d3.select(params.root + ' .crop_button').style('color', '#337ab7').classed('fa-crop', true).classed('fa-undo', false);
-
-	      // cgm.filter_viz_using_names(cgm.params.crop_filter_nodes);
-	      cgm.filter_viz_using_nodes(cgm.params.crop_filter_nodes);
-	    }
-
-	    two_translate_zoom(params, 0, 0, 1);
 	  }).classed('sidebar_tooltip', true).append('span').classed('sidebar_tooltip_text', true).html('Crop matrix').style('left', '-400%');
 
 	  // save svg: example from: http://bl.ocks.org/pgiraud/8955139#profile.json
