@@ -1,11 +1,11 @@
 def main():
-  pass
+  # pass
 
   # check digit()
 
   # overview_mnist_mat()
 
-  # process_MNIST()
+  process_MNIST()
 
 def process_MNIST():
   '''
@@ -58,8 +58,6 @@ def process_MNIST():
   # write matrix to file
   mat = mnist_obj['data']
 
-  print('shape of MNIST data')
-  print(mat.shape)
 
   # construct row labels: 28x28 pixel image
   row_labels = []
@@ -67,6 +65,12 @@ def process_MNIST():
     for j in range(28):
       row_labels.append('pos_'+str(i)+'-'+str(j))
 
+  df = pd.DataFrame(data=mat, columns=col_labels, index=row_labels)
+
+  print('\nshape of MNIST data')
+  print('-------------')
+  print(df.shape)
+  print('saving')
   # save copy of full data
   df.to_csv('processed_MNIST/MNIST_row_labels.txt', sep='\t')
 

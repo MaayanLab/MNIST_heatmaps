@@ -77,6 +77,8 @@ clustergrammer
 ######################
 processed_MNIST/large_files/*
 
+processed_MNIST/MNIST_row_labels.txt
+
 # add random subsamples since directory is ~20MB
 #processed_MNIST/random_subsampling/*
 
