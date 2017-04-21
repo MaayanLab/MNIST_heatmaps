@@ -48,7 +48,7 @@ def process_MNIST():
     num_digit[inst_label] = num_digit[inst_label] + 1
 
     # inst_count = 0
-    inst_label = label_dict[inst_label] + '-' + str(inst_count)
+    inst_label = (label_dict[inst_label] + '-' + str(inst_count), 'digit: ' + label_dict[inst_label] )
 
     col_labels.append(inst_label)
 
