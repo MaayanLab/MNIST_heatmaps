@@ -65,7 +65,32 @@ def process_MNIST():
     for j in range(28):
       row_labels.append('pos_'+str(i)+'-'+str(j))
 
-  df = pd.DataFrame(data=mat, columns=col_labels, index=row_labels)
+  # add row categories
+  ###############################
+  tuple_row_labels = []
+
+  max_radius = np.sqrt( np.square(28) + np.square(28) )
+
+  for inst_row in row_labels:
+
+    # make name
+    inst_name = 'Pixels: '+ inst_row
+
+    # make radius category
+    pos = inst_row.split('pos_')[1]
+    # inst_x = int(pos.split('-')[0])
+    # inst_y = int(pos.split('-')[1])
+    # inst_radius = max_radius - np.sqrt( np.square(inst_x) + np.square(inst_y) )
+    inst_x = int(pos.split('-')[0]) - 14
+    inst_y = int(pos.split('-')[1]) - 14
+    inst_radius = (max_radius/2 - np.sqrt( np.square(inst_x) + np.square(inst_y) ))/19.79
+    inst_cat = 'Center: '+ str(inst_radius)
+
+    inst_tuple = ( inst_name, inst_cat )
+
+    tuple_row_labels.append(inst_tuple)
+
+  df = pd.DataFrame(data=mat, columns=col_labels, index=tuple_row_labels)
 
   print('\nshape of MNIST data')
   print('-------------')
